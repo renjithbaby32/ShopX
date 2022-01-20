@@ -5,24 +5,9 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 10
-  const page = Number(req.query.pageNumber) || 1
+  const products = await Product.find({})
 
-  const keyword = req.query.keyword
-    ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
-      }
-    : {}
-
-  const count = await Product.countDocuments({ ...keyword })
-  const products = await Product.find({ ...keyword })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-
-  res.json({ products, page, pages: Math.ceil(count / pageSize) })
+  res.json({ products })
 })
 
 // @desc    Fetch single product
@@ -65,6 +50,7 @@ const createProduct = asyncHandler(async (req, res) => {
     image: '/images/sample.jpg',
     brand: 'Sample brand',
     category: 'Sample category',
+    subCategory: 'Sample sub-category',
     countInStock: 0,
     numReviews: 0,
     description: 'Sample description',
@@ -78,15 +64,8 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    image,
-    brand,
-    category,
-    countInStock,
-  } = req.body
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body
 
   const product = await Product.findById(req.params.id)
 
@@ -162,7 +141,7 @@ const getTopProducts = asyncHandler(async (req, res) => {
 // @access  Public
 const getProductsByCategory = asyncHandler(async (req, res) => {
   const products = await Product.find({
-    category: req.params.id
+    category: req.params.id,
   })
 
   res.json(products)
@@ -176,5 +155,5 @@ export {
   updateProduct,
   createProductReview,
   getTopProducts,
-  getProductsByCategory
+  getProductsByCategory,
 }
