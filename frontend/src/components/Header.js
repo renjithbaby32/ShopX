@@ -1,9 +1,7 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
-import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
 
 const Header = () => {
@@ -71,7 +69,7 @@ const Header = () => {
                   <LinkContainer to="/admin/orderlist">
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/orderlist">
+                  <LinkContainer to="/admin/categories">
                     <NavDropdown.Item>Categories</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
