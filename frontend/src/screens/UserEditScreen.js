@@ -85,7 +85,7 @@ const UserEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='isadmin'>
+            <Form.Group  className='py-3' controlId='isadmin'>
               <Form.Check
                 type='checkbox'
                 label='Is Admin'

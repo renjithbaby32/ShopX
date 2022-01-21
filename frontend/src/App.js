@@ -12,6 +12,7 @@ import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import CategoriesListScreen from './screens/CategoriesListScreen'
+import ProductsByCategoryScreen from './screens/ProductsByCategoryScreen'
 
 const App = () => {
   return (
@@ -32,6 +33,11 @@ const App = () => {
             <Route
               path="/admin/productlist"
               element={<ProductListScreen />}
+              exact
+            />
+            <Route
+              path="/admin/productsbycategory/:id"
+              element={<ProductsByCategoryScreen />}
               exact
             />
             <Route

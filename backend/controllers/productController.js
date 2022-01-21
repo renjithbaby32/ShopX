@@ -10,6 +10,17 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products })
 })
 
+// @desc    Get products by category
+// @route   GET /api/products/category:id
+// @access  Public
+const getProductsByCategory = asyncHandler(async (req, res) => {
+  const products = await Product.find({
+    category: req.params.id,
+  })
+
+  res.json({products})
+})
+
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 // @access  Public
@@ -136,16 +147,7 @@ const getTopProducts = asyncHandler(async (req, res) => {
   res.json(products)
 })
 
-// @desc    Get products by category
-// @route   GET /api/products/category/:id
-// @access  Public
-const getProductsByCategory = asyncHandler(async (req, res) => {
-  const products = await Product.find({
-    category: req.params.id,
-  })
 
-  res.json(products)
-})
 
 export {
   getProducts,

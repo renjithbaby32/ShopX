@@ -53,7 +53,7 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
         <div className='py-3'>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="info">
             Sign In
           </Button>
         </div>

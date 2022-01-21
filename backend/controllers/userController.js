@@ -10,6 +10,10 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email })
 
+  if(user.isBlocked){
+    res.redirect('/Blocked')
+  }
+
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
@@ -151,6 +155,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name
     user.email = req.body.email || user.email
     user.isAdmin = req.body.isAdmin
+    user.isBlocked = req.body.isBlocked
 
     const updatedUser = await user.save()
 

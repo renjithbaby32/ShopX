@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listCategories } from '../actions/categoryActions'
+import { getProductsByCategory } from '../actions/productActions'
 
 const CategoriesListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const categoryList = useSelector((state) => state.categoryList)
-  console.log(categoryList)
-  const { loading, error, categories } = categoryList 
+  const { loading, error, categories } = categoryList
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -60,11 +60,15 @@ const CategoriesListScreen = () => {
                 <tr key={category._id}>
                   <td>{category._id}</td>
                   <td>{category.name}</td>
-                  <td><LinkContainer to={`/admin/category/${category._id}/edit`}>
+                  <td>
+                    <LinkContainer
+                      to={`/admin/productsbycategory/${category.name}`}
+                    >
                       <Button variant="light" className="btn-sm">
                         View Products
                       </Button>
-                    </LinkContainer></td>
+                    </LinkContainer>
+                  </td>
                   <td>
                     {/* <LinkContainer to={`/admin/category/${category._id}/edit`}>
                       <Button variant="light" className="btn-sm">
