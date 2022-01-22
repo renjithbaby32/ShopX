@@ -21,6 +21,8 @@ const ProductEditScreen = () => {
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
   const [subCategory, setSubCategory] = useState('')
+  const [rating, setRating] = useState('')
+  const [numReviews, setNumReviews] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -51,6 +53,8 @@ const ProductEditScreen = () => {
         setBrand(product.brand)
         setCategory(product.category)
         setSubCategory(product.subCategory)
+        setRating(product.rating)
+        setNumReviews(product.numReviews)
         setCountInStock(product.countInStock)
         setDescription(product.description)
       }
@@ -90,8 +94,11 @@ const ProductEditScreen = () => {
         image,
         brand,
         category,
+        subCategory,
+        rating,
         description,
         countInStock,
+        numReviews,
       })
     )
   }
@@ -102,7 +109,7 @@ const ProductEditScreen = () => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Edit Product</h1>
+        <h1>Add/Edit Product</h1>
         {loadingUpdate && <Loader />}
         {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
@@ -165,6 +172,26 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId="brand">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="brand">
+              <Form.Label>Sub-category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter sub-category"
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Form.Group controlId="countInStock">
               <Form.Label>Count In Stock</Form.Label>
               <Form.Control
@@ -175,13 +202,23 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="category">
-              <Form.Label>Category</Form.Label>
+            <Form.Group controlId="rating">
+              <Form.Label>Rating</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                type="Number"
+                placeholder="Rating"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="numReviews">
+              <Form.Label>Number of reviews</Form.Label>
+              <Form.Control
+                type="Number"
+                placeholder="Number of reviews"
+                value={numReviews}
+                onChange={(e) => setNumReviews(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

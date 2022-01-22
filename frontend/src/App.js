@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Container, Placeholder } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
@@ -11,8 +11,12 @@ import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
-import CategoriesListScreen from './screens/CategoriesListScreen'
 import ProductsByCategoryScreen from './screens/ProductsByCategoryScreen'
+import CartScreen from './screens/CartScreen'
+import CategoriesListScreen from './screens/CategoriesListScreen'
+import ShippingScreen from './screens/ShippingScreen'
+import PaymentScreen from './screens/PaymentScreen'
+import PlaceOrderScreen from './screens/PlaceOrderScreen'
 
 const App = () => {
   return (
@@ -30,6 +34,11 @@ const App = () => {
               element={<CategoriesListScreen />}
             />
             <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
+            <Route path="/cart/" element={<CartScreen />} />
+            <Route path="/cart/:id" element={<CartScreen />} />
+            <Route path="/shipping" element={<ShippingScreen />} />
+            <Route path="/payment" element={<PaymentScreen />} />
+            <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route
               path="/admin/productlist"
               element={<ProductListScreen />}

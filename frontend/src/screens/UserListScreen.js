@@ -11,8 +11,6 @@ const UserListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [refresh, setRefresh] = useState('')
-
   const userList = useSelector((state) => state.userList)
   const { loading, error, users } = userList
 
@@ -21,6 +19,9 @@ const UserListScreen = () => {
 
   const userDelete = useSelector((state) => state.userDelete)
   const { success: successDelete } = userDelete
+
+  const userUpdate = useSelector((state) => state.userUpdate)
+  const { success: successUpdate } = userUpdate
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure to delete this  user?')) {
@@ -31,14 +32,12 @@ const UserListScreen = () => {
   const blockHandler = (user) => {
     if (window.confirm('Do you want to block this user?')) {
       dispatch(updateUser({ ...user, isBlocked: true }))
-      setRefresh(!refresh)
     }
   }
 
   const unblockHandler = (user) => {
     if (window.confirm('Unblock this user?')) {
       dispatch(updateUser({ ...user, isBlocked: false }))
-      setRefresh(!refresh)
     }
   }
 
@@ -48,10 +47,12 @@ const UserListScreen = () => {
     } else {
       navigate('/login')
     }
-  }, [dispatch, userInfo, refresh])
+  }, [dispatch, userInfo, successUpdate])
 
   return (
     <>
+      {console.log('render')}
+      {console.log(users)}
       <h1>Users</h1>
       {loading ? (
         <Loader />
@@ -109,14 +110,14 @@ const UserListScreen = () => {
                     className="btn-sm"
                     onClick={() => blockHandler(user)}
                   >
-                    <i class="fas fa-user-lock"></i>
+                    <i className="fas fa-user-lock"></i>
                   </Button>
                   <Button
                     variant="success"
                     className="btn-sm"
                     onClick={() => unblockHandler(user)}
                   >
-                    <i class="fas fa-unlock-alt"></i>
+                    <i className="fas fa-unlock-alt"></i>
                   </Button>
                 </td>
               </tr>
