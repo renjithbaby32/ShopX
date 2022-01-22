@@ -51,8 +51,6 @@ const UserListScreen = () => {
 
   return (
     <>
-      {console.log('render')}
-      {console.log(users)}
       <h1>Users</h1>
       {loading ? (
         <Loader />

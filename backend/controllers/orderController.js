@@ -27,7 +27,6 @@ w  } else {
       shippingPrice,
       totalPrice,
     })
-    console.log(order)
     const createdOrder = await order.save()
 
     res.status(201).json(createdOrder)

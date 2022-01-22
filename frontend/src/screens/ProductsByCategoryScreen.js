@@ -14,7 +14,6 @@ const ProductsByCategoryScreen = () => {
   const navigate = useNavigate()
 
   const productList = useSelector((state) => state.productList)
-  //   console.log(productList)
   const { loading, error, products } = productList
 
   const userLogin = useSelector((state) => state.userLogin)

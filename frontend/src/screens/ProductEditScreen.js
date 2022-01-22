@@ -84,7 +84,6 @@ const ProductEditScreen = () => {
   }
 
   const submitHandler = (e) => {
-    console.log(image)
     e.preventDefault()
     dispatch(
       updateProduct({
