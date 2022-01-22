@@ -28,52 +28,52 @@ const ShippingScreen = () => {
     <FormContainer>
       <CheckoutSteps step1 step2 />
       <h1>Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId='address'>
+      <Form onSubmit={submitHandler} className="py-3">
+        <Form.Group controlId="address">
           <Form.Label>Address</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter address'
+            type="text"
+            placeholder="Enter address"
             value={address}
             required
             onChange={(e) => setAddress(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId='city'>
+        <Form.Group controlId="city">
           <Form.Label>City</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter city'
+            type="text"
+            placeholder="Enter city"
             value={city}
             required
             onChange={(e) => setCity(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId='postalCode'>
+        <Form.Group controlId="postalCode">
           <Form.Label>Postal Code</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter postal code'
+            type="text"
+            placeholder="Enter postal code"
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId='country'>
+        <Form.Group controlId="country" className="pb-3">
           <Form.Label>Country</Form.Label>
           <Form.Control
-            type='text'
-            placeholder='Enter country'
+            type="text"
+            placeholder="Enter country"
             value={country}
             required
             onChange={(e) => setCountry(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='success'>
+        <Button type="submit" variant="success">
           Continue
         </Button>
       </Form>

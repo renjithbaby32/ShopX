@@ -5,8 +5,15 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({})
-
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {}
+  const products = await Product.find({ ...keyword })
   res.json({ products })
 })
 
@@ -18,7 +25,7 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
     category: req.params.id,
   })
 
-  res.json({products})
+  res.json({ products })
 })
 
 // @desc    Fetch single product
@@ -75,8 +82,18 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, subCategory, rating, countInStock, numReviews } =
-    req.body
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    subCategory,
+    rating,
+    countInStock,
+    numReviews,
+  } = req.body
 
   const product = await Product.findById(req.params.id)
 
@@ -149,8 +166,6 @@ const getTopProducts = asyncHandler(async (req, res) => {
 
   res.json(products)
 })
-
-
 
 export {
   getProducts,

@@ -24,14 +24,14 @@ import {
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
-export const listProducts = () => async (
+export const listProducts = (keyword='') => async (
   dispatch
 ) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
     const { data } = await axios.get(
-      `/api/products`
+      `/api/products?keyword=${keyword}`
     )
 
     dispatch({
