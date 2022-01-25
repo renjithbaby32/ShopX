@@ -5,19 +5,23 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Paginate from '../components/Paginate'
 import {
   listProducts,
   deleteProduct,
   createProduct,
 } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import { useParams } from 'react-router-dom'
 
 const ProductListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const params = useParams()
+  const pageNumber = params.pageNumber || 1
 
   const productList = useSelector((state) => state.productList)
-  const { loading, error, products } = productList
+  const { loading, error, products, pages, page } = productList
 
   const productDelete = useSelector((state) => state.productDelete)
   const {
@@ -47,9 +51,16 @@ const ProductListScreen = () => {
     if (successCreate) {
       navigate(`/admin/product/${createdProduct._id}/edit`)
     } else {
-      dispatch(listProducts())
+      dispatch(listProducts('', pageNumber))
     }
-  }, [dispatch, userInfo, successDelete, successCreate, createdProduct])
+  }, [
+    dispatch,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+    pageNumber,
+  ])
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
@@ -68,7 +79,11 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-right">
-          <Button className="my-3"  variant = 'success' onClick={createProductHandler}>
+          <Button
+            className="my-3"
+            variant="success"
+            onClick={createProductHandler}
+          >
             <i className="fas fa-plus"></i> Create Product
           </Button>
         </Col>
@@ -122,6 +137,7 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
+          <Paginate pages={pages} page={page} isAdmin={true} />
         </>
       )}
     </>

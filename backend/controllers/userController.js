@@ -10,7 +10,7 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email })
 
-  if(user.isBlocked){
+  if (user.isBlocked) {
     res.redirect('/Blocked')
   }
 

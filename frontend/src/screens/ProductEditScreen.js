@@ -1,7 +1,8 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Form, Button, FormControl } from 'react-bootstrap'
+import { Form, Button, FormControl, ListGroup } from 'react-bootstrap'
+import { Table, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -9,6 +10,7 @@ import FormContainer from '../components/FormContainer'
 import { listProductDetails, updateProduct } from '../actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 import { useParams } from 'react-router-dom'
+import { listCategories } from '../actions/categoryActions'
 
 const ProductEditScreen = () => {
   const { id } = useParams()
@@ -32,6 +34,9 @@ const ProductEditScreen = () => {
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
+
   const productUpdate = useSelector((state) => state.productUpdate)
   const {
     loading: loadingUpdate,
@@ -46,6 +51,7 @@ const ProductEditScreen = () => {
     } else {
       if (!product.name || product._id !== productId) {
         dispatch(listProductDetails(productId))
+        dispatch(listCategories())
       } else {
         setName(product.name)
         setPrice(product.price)
@@ -171,15 +177,24 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="brand">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+            <ListGroup.Item>
+              <Row>
+                <Col>Category</Col>
+                <Col>
+                  <Form.Control
+                    as="select"
+                    value="select"
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    {categories.map((x) => (
+                      <option key={x._id} value={x.name}>
+                        {x.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Col>
+              </Row>
+            </ListGroup.Item>
 
             <Form.Group controlId="brand">
               <Form.Label>Sub-category</Form.Label>

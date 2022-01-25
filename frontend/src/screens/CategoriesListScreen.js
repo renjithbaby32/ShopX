@@ -18,7 +18,13 @@ const CategoriesListScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  const createCategoryHandler = () => {}
+  const createCategoryHandler = () => {
+    if (userInfo && userInfo.isAdmin) {
+      navigate('/admin/addcategory')
+    } else {
+      navigate('/login?redirect=addcategory')
+    }
+  }
   const deleteHandler = (id) => {}
 
   useEffect(() => {
@@ -36,7 +42,11 @@ const CategoriesListScreen = () => {
           <h1>Categories</h1>
         </Col>
         <Col className="text-right">
-          <Button className="my-3" onClick={createCategoryHandler}>
+          <Button
+            className="my-3"
+            variant="success"
+            onClick={createCategoryHandler}
+          >
             <i className="fas fa-plus"></i> Create A Category
           </Button>
         </Col>
