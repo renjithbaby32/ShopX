@@ -18,6 +18,11 @@ connectDB()
 
 app.use(express.json())
 
+// var instance = new Razorpay({
+//   key_id: 'rzp_test_w4t1UiRN2QYw07',
+//   key_secret: 'w7NaHJcDzrWEf1LOqfvducux',
+// })
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
