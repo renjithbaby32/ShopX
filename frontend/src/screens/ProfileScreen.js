@@ -128,6 +128,7 @@ const ProfileScreen = () => {
               <tr>
                 <th>ID</th>
                 <th>DATE</th>
+                <th>ORDER ITEM</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
                 <th>DELIVERED</th>
@@ -139,6 +140,7 @@ const ProfileScreen = () => {
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>{order.orderItems[0].name}</td>
                   <td>{order.totalPrice}</td>
                   <td>
                     {order.isPaid ? (

@@ -48,12 +48,65 @@ const OrderScreen = () => {
     )
   }
 
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement('script')
+      script.src = src
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
+  }
+
+  async function showRazorpay() {
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?')
+      return
+    }
+
+    const { data } = await axios.post(`/razorpay/${orderId}`)
+    console.time('data')
+    console.log(data)
+    console.timeEnd('data')
+
+    const options = {
+      key: 'rzp_test_w4t1UiRN2QYw07',
+      currency: data.currency,
+      amount: data.amount.toString(),
+      order_id: data.id,
+      name: 'ShopX',
+      description: 'Make the payment to complete the process',
+      image: '',
+      handler: function (response) {
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
+
+        alert('Transaction successful')
+      },
+      prefill: {
+        name: 'Renjith Baby',
+        email: 'renjithbabyofficial@gmail.com',
+        phone_number: '9495064118',
+      },
+    }
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
+    dispatch({
+      type: 'ORDER_DELIVER_SUCCESS',
+    })
+  }
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/login')
     }
-
-    const addPayPalScript = async () => {}
 
     if (!order || successPay || successDeliver || order._id !== orderId) {
       dispatch({ type: ORDER_PAY_RESET })
@@ -61,7 +114,6 @@ const OrderScreen = () => {
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
-        addPayPalScript()
       } else {
         setSdkReady(true)
       }
@@ -189,10 +241,7 @@ const OrderScreen = () => {
               </ListGroup.Item>
               {!order.isPaid && (
                 <ListGroup.Item>
-                  <Button
-                    amount={order.totalPrice}
-                    onSuccess={successPaymentHandler}
-                  >
+                  <Button className="btn btn-block" onClick={showRazorpay}>
                     Pay Now
                   </Button>
                 </ListGroup.Item>
