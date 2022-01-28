@@ -19,18 +19,19 @@ const Header = () => {
     <header>
       <Navbar
         variant="dark"
-        style={{ backgroundColor: '#e40046', height: '64px' }}
+        style={{ backgroundColor: '#000' }}
         expand="lg"
         collapseOnSelect
       >
-        <Container fluid className="px-5  ">
+        <Container>
           <LinkContainer to="/">
             <Navbar.Brand>ShopX</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <SearchBox />
             <Nav className="ml-auto">
+              <SearchBox />
+
               <LinkContainer style={{ color: 'white' }} to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i> Cart

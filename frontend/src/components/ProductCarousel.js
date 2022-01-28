@@ -27,7 +27,7 @@ const ProductCarousel = () => {
       pause="hover"
       variant="dark"
       style={{
-        backgroundColor: '#82140c',
+        backgroundColor: 'rgb(187 193 237 / 40%)',
         marginTop: '50px',
         marginBottom: '50px',
       }}
