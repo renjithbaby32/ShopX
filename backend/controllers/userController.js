@@ -171,6 +171,34 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Add an item to the wishlist
+// @route   POST /api/users/wishlist/:id
+// @access  Private
+const addItemToWishlist = asyncHandler(async (req, res) => {
+  const productId = req.params.productId
+  const userId = req.user._id
+
+  const user = await User.findById(userId)
+  await user.wishlist.push(productId)
+  await user.save()
+  res.json({
+    message: 'success',
+  })
+})
+
+// @desc    Get all the wishlist items from a user document
+// @route   GET /api/users/wishlist
+// @access  Private
+const getWishListItems = asyncHandler(async (req, res) => {
+  const userId = req.user._id
+
+  const user = await User.findOne({ _id: userId }).populate(
+    'wishlist',
+    'name price'
+  )
+  res.json(user.wishlist)
+})
+
 export {
   authUser,
   registerUser,
@@ -180,4 +208,6 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  addItemToWishlist,
+  getWishListItems,
 }

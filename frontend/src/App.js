@@ -13,6 +13,7 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import ProductsByCategoryScreen from './screens/ProductsByCategoryScreen'
 import CartScreen from './screens/CartScreen'
+import WishListScreen from './screens/WishListScreen'
 import CategoriesListScreen from './screens/CategoriesListScreen'
 import ShippingScreen from './screens/ShippingScreen'
 import PaymentScreen from './screens/PaymentScreen'
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
             <Route path="/cart/" element={<CartScreen />} />
             <Route path="/cart/:id" element={<CartScreen />} />
+            <Route path="/wishlist" element={<WishListScreen />} />
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
