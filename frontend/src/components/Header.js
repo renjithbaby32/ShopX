@@ -31,14 +31,29 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <SearchBox />
-
-              <LinkContainer style={{ color: 'white' }} to="/cart">
+              {userInfo && (
+                <LinkContainer
+                  className="px-3"
+                  style={{ color: 'white' }}
+                  to="/wishlist"
+                >
+                  <Nav.Link>
+                    <i className="fas fa-heart"></i> Wishlist
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+              <LinkContainer
+                className="px-3"
+                style={{ color: 'white' }}
+                to="/cart"
+              >
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i> Cart
                 </Nav.Link>
               </LinkContainer>
               {userInfo ? (
                 <NavDropdown
+                  className="px-3"
                   title={
                     <span style={{ color: 'white' }}>{userInfo.name}</span>
                   }

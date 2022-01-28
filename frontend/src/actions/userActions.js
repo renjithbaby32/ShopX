@@ -24,6 +24,15 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_REQUEST,
+  WISHLIST_LIST_REQUEST,
+  WISHLIST_LIST_SUCCESS,
+  WISHLIST_LIST_FAIL,
+  ADD_T0_WISHLIST_REQUEST,
+  ADD_T0_WISHLIST_SUCCESS,
+  ADD_T0_WISHLIST_FAIL,
+  DELETE_FROM_WISHLIST_REQUEST,
+  DELETE_FROM_WISHLIST_SUCCESS,
+  DELETE_FROM_WISHLIST_FAIL,
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
@@ -38,7 +47,7 @@ export const login = (email, password) => async (dispatch) => {
         'Content-Type': 'application/json',
       },
     }
-    
+
     const { data } = await axios.post(
       '/api/users/login',
       { email, password },
@@ -298,6 +307,106 @@ export const updateUser = (user) => async (dispatch, getState) => {
     }
     dispatch({
       type: USER_UPDATE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const listWishlist = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: WISHLIST_LIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(`/api/users/wishlist`, config)
+
+    dispatch({
+      type: WISHLIST_LIST_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    dispatch({
+      type: WISHLIST_LIST_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const addToWishList = (productId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADD_T0_WISHLIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.post(`/api/users/wishlist/${productId}`, {}, config)
+
+    dispatch({
+      type: ADD_T0_WISHLIST_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    dispatch({
+      type: ADD_T0_WISHLIST_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const deleteFromWishlist = (productId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DELETE_FROM_WISHLIST_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.delete(`/api/users/wishlist/${productId}`, config)
+
+    dispatch({
+      type: DELETE_FROM_WISHLIST_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    dispatch({
+      type: DELETE_FROM_WISHLIST_FAIL,
       payload: message,
     })
   }

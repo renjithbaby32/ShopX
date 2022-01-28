@@ -9,6 +9,7 @@ import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 import Meta from '../components/Meta'
 import { listProducts } from '../actions/productActions'
+import { listWishlist } from '../actions/userActions'
 
 const HomeScreen = () => {
   const params = useParams()
@@ -16,11 +17,25 @@ const HomeScreen = () => {
   const pageNumber = params.pageNumber
   const dispatch = useDispatch()
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, page, pages } = productList
 
+  const wishlist = useSelector((state) => state.wishlist)
+  const {
+    loading: wishlistLoading,
+    error: wishlistError,
+    wishlistItems,
+    successDelete,
+  } = wishlist
+
   useEffect(() => {
     dispatch(listProducts(keyword, pageNumber))
+    if (userInfo) {
+      dispatch(listWishlist())
+    }
   }, [dispatch, keyword, pageNumber])
 
   return (
@@ -37,7 +52,7 @@ const HomeScreen = () => {
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
-                <Product product={product} />
+                <Product wishlist={wishlistItems} product={product} />
               </Col>
             ))}
           </Row>

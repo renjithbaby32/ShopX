@@ -48,6 +48,30 @@ h2 {
   margin: 0 auto;
 }
 
+.like-button {
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 10rem;
+  background-color: transparent;
+  border: transparent;
+}
+
+.like-button :hover {
+  color: red;
+}
+
+.fallback {
+  background-color: aliceblue;
+  width: fit-content;
+}
+
+.fallback-h1 {
+  color: red;
+}
+
+.fallback-home {
+  color: green;
+}
 /* 
 @media (max-width: 900px) {
   .carousel-caption h2 {

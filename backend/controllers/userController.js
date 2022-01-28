@@ -194,9 +194,24 @@ const getWishListItems = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ _id: userId }).populate(
     'wishlist',
-    'name price'
+    'name price image'
   )
   res.json(user.wishlist)
+})
+
+// @desc    Delete an item from the wishlist
+// @route   DELETE /api/users/wishlist/:productId
+// @access  Private/Admin
+const deleteItemFromWishlist = asyncHandler(async (req, res) => {
+  const productId = req.params.productId
+  const userId = req.user._id
+
+  const user = await User.findById(userId)
+  await user.wishlist.pull(productId)
+  await user.save()
+  res.json({
+    message: 'deleted successfully ',
+  })
 })
 
 export {
@@ -210,4 +225,5 @@ export {
   updateUser,
   addItemToWishlist,
   getWishListItems,
+  deleteItemFromWishlist,
 }

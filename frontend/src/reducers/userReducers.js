@@ -25,6 +25,15 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
   USER_UPDATE_PROFILE_RESET,
+  WISHLIST_LIST_REQUEST,
+  WISHLIST_LIST_SUCCESS,
+  WISHLIST_LIST_FAIL,
+  ADD_T0_WISHLIST_REQUEST,
+  ADD_T0_WISHLIST_SUCCESS,
+  ADD_T0_WISHLIST_FAIL,
+  DELETE_FROM_WISHLIST_REQUEST,
+  DELETE_FROM_WISHLIST_SUCCESS,
+  DELETE_FROM_WISHLIST_FAIL,
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -127,6 +136,31 @@ export const userUpdateReducer = (state = { user: {} }, action) => {
       return {
         user: {},
       }
+    default:
+      return state
+  }
+}
+
+export const wishListReducer = (state = { wishlistItems: [] }, action) => {
+  switch (action.type) {
+    case WISHLIST_LIST_REQUEST:
+      return { loading: true }
+    case WISHLIST_LIST_SUCCESS:
+      return { loading: false, wishlistItems: action.payload }
+    case WISHLIST_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    case ADD_T0_WISHLIST_REQUEST:
+      return { loading: true }
+    case ADD_T0_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case ADD_T0_WISHLIST_FAIL:
+      return { loading: false, error: action.payload }
+    case DELETE_FROM_WISHLIST_REQUEST:
+      return { loading: true }
+    case DELETE_FROM_WISHLIST_SUCCESS:
+      return { loading: false, successDelete: true }
+    case DELETE_FROM_WISHLIST_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }
