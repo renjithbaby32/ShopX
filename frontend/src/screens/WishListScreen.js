@@ -41,6 +41,7 @@ const CartScreen = () => {
         <Row>
           <Col>
             <h1>Wishlist</h1>
+            <h3>Current price may be different</h3>
             {wishlistItems.length === 0 ? (
               <Message>
                 Your wishlist is empty <Link to="/">Go Back</Link>

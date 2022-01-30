@@ -17,7 +17,13 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   useEffect(() => {
+    if (!userInfo) {
+      navigate('/login')
+    }
     if (productId) {
       dispatch(addToCart(productId, qty))
     }

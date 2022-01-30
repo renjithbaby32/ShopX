@@ -32,6 +32,10 @@ h2 {
   margin: 0.1rem;
 }
 
+.price-row {
+  min-height: 48px;
+}
+
 /* carousel */
 .carousel-item-next,
 .carousel-item-prev,
@@ -60,6 +64,7 @@ h2 {
 }
 
 .like-button {
+  min-height: 32px;
   font-size: 20px;
   cursor: pointer;
   border-radius: 10rem;

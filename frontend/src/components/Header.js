@@ -54,17 +54,16 @@ const Header = () => {
             </Nav>
             <Nav className="ml-auto">
               <SearchBox />
-              {userInfo && (
-                <LinkContainer
-                  className="px-3"
-                  style={{ color: 'white' }}
-                  to="/wishlist"
-                >
-                  <Nav.Link>
-                    <i className="fas fa-heart"></i> Wishlist
-                  </Nav.Link>
-                </LinkContainer>
-              )}
+              <LinkContainer
+                className="px-3"
+                style={{ color: 'white' }}
+                to="/wishlist"
+              >
+                <Nav.Link>
+                  <i className="fas fa-heart"></i> Wishlist
+                </Nav.Link>
+              </LinkContainer>
+
               <LinkContainer
                 className="px-3"
                 style={{ color: 'white' }}

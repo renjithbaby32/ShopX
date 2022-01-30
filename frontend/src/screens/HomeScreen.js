@@ -8,7 +8,11 @@ import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 import Meta from '../components/Meta'
-import { listProducts, getProductsByCategory } from '../actions/productActions'
+import {
+  listProducts,
+  getProductsByCategory,
+  listTopProducts,
+} from '../actions/productActions'
 import { listWishlist } from '../actions/userActions'
 
 const HomeScreen = () => {
@@ -24,6 +28,14 @@ const HomeScreen = () => {
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, page, pages } = productList
 
+  const productTopRated = useSelector((state) => state.productTopRated)
+  const {
+    loading: topRatedProductsLoading,
+    error: topRatedProductsError,
+    products: topRatedProducts,
+  } = productTopRated
+  console.log(topRatedProducts)
+
   const wishlist = useSelector((state) => state.wishlist)
   const {
     loading: wishlistLoading,
@@ -37,6 +49,7 @@ const HomeScreen = () => {
       dispatch(getProductsByCategory(id))
     } else {
       dispatch(listProducts(keyword, pageNumber))
+      dispatch(listTopProducts())
     }
     if (userInfo) {
       dispatch(listWishlist())
@@ -46,28 +59,54 @@ const HomeScreen = () => {
   return (
     <>
       <Meta title="Home | ShopX" />
-      {!keyword && !id && <ProductCarousel />}
-      <h1>Latest Products</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
-      ) : (
+      {!keyword && !id && (
         <>
-          <Row>
-            {products.map((product) => (
+          <h1>Products On Discount</h1>
+          <ProductCarousel />
+        </>
+      )}
+
+      <>
+        {!keyword && !id && (
+          <>
+            <h1>Top Rated Products</h1>
+            <Row>
+              {topRatedProductsLoading ? (
+                <Loader />
+              ) : topRatedProductsError ? (
+                <Message variant="danger">{error}</Message>
+              ) : (
+                topRatedProducts.map((product) => (
+                  <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
+                    <Product wishlist={wishlistItems} product={product} />
+                  </Col>
+                ))
+              )}
+            </Row>
+          </>
+        )}
+        <h1>
+          {id
+            ? 'Category: ' + id
+            : keyword
+            ? `Products related to '` + keyword + `'`
+            : 'Latest Products'}
+        </h1>
+        <Row>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant="danger">{error}</Message>
+          ) : (
+            products.map((product) => (
               <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
                 <Product wishlist={wishlistItems} product={product} />
               </Col>
-            ))}
-          </Row>
-          <Paginate
-            pages={pages}
-            page={page}
-            keyword={keyword ? keyword : ''}
-          />
-        </>
-      )}
+            ))
+          )}
+        </Row>
+        <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''} />
+      </>
     </>
   )
 }

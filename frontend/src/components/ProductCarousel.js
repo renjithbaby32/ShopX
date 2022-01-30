@@ -4,16 +4,23 @@ import { Carousel, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from './Loader'
 import Message from './Message'
-import { listTopProducts } from '../actions/productActions'
+import {
+  listProductsOnDiscount,
+  listTopProducts,
+} from '../actions/productActions'
 
 const ProductCarousel = () => {
   const dispatch = useDispatch()
 
-  const productTopRated = useSelector((state) => state.productTopRated)
-  const { loading, error, products } = productTopRated
+  // const productTopRated = useSelector((state) => state.productTopRated)
+  // const { loading, error, products } = productTopRated
+
+  const productsOnDiscount = useSelector((state) => state.productsOnDiscount)
+  const { loading, error, products } = productsOnDiscount
 
   useEffect(() => {
-    dispatch(listTopProducts())
+    // dispatch(listTopProducts())
+    dispatch(listProductsOnDiscount())
   }, [dispatch])
 
   return loading ? (
@@ -28,7 +35,6 @@ const ProductCarousel = () => {
       variant="dark"
       style={{
         backgroundColor: 'rgb(187 193 237 / 40%)',
-        marginTop: '50px',
         marginBottom: '50px',
       }}
     >
@@ -43,7 +49,13 @@ const ProductCarousel = () => {
             />
             <Carousel.Caption className="carousel-caption">
               <h2>
-                {product.name} (&#x20b9;{product.price})
+                {product.name} (&#x20b9;
+                {product.discountPrice > 0
+                  ? product.price - product.price * 0.01 * product.discountPrice
+                  : product.price}
+                )
+                {product.discountPrice > 0 &&
+                  ' On ' + product.discountPrice + '% discount'}
               </h2>
             </Carousel.Caption>
           </Link>

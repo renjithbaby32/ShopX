@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { Card, Row, Col } from 'react-bootstrap'
 import Rating from './Rating'
 import {
   addToWishList,
@@ -32,10 +32,10 @@ const Product = ({ product, wishlist = [] }) => {
 
   return (
     <>
-      <Card className="my-3 p-3 rounded">
+      <Card className="my-1 p-3 rounded mb-3">
         <div>
-          {userInfo && (
-            <div className="like-button" title="Add to favourites">
+          <div className="like-button" title="Add to favourites">
+            {userInfo && (
               <i
                 onClick={addItemToWishListHandler}
                 className="fa fa-heart"
@@ -43,8 +43,14 @@ const Product = ({ product, wishlist = [] }) => {
                   color: test ? 'red' : '#55595c',
                 }}
               ></i>
-            </div>
-          )}
+            )}
+
+            {product.discountPrice > 0 && (
+              <span className="float-right" style={{ color: 'green' }}>
+                {product.discountPrice}% off
+              </span>
+            )}
+          </div>
 
           <Link to={`/product/${product._id}`}>
             <Card.Img
@@ -69,7 +75,25 @@ const Product = ({ product, wishlist = [] }) => {
             />
           </Card.Text>
 
-          <Card.Text as="h3">&#x20b9;{product.price}</Card.Text>
+          {product.discountPrice ? (
+            <Row className="price-row">
+              <Col>
+                <h5>
+                  &#x20b9;
+                  {product.price - product.price * 0.01 * product.discountPrice}
+                </h5>
+              </Col>
+              <Col>
+                <Card.Text as="h5">
+                  <s>&#x20b9;{product.price}</s>
+                </Card.Text>
+              </Col>
+            </Row>
+          ) : (
+            <Card.Text className="price-row" as="h5">
+              &#x20b9;{product.price}
+            </Card.Text>
+          )}
         </Card.Body>
       </Card>
     </>

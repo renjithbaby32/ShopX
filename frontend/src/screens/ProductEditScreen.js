@@ -19,6 +19,7 @@ const ProductEditScreen = () => {
 
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
+  const [discountPrice, setDiscountPrice] = useState(0)
   const [image, setImage] = useState('')
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
@@ -55,6 +56,7 @@ const ProductEditScreen = () => {
       } else {
         setName(product.name)
         setPrice(product.price)
+        setDiscountPrice(product.discountPrice)
         setImage(product.image)
         setBrand(product.brand)
         setCategory(product.category)
@@ -96,6 +98,7 @@ const ProductEditScreen = () => {
         _id: productId,
         name,
         price,
+        discountPrice,
         image,
         brand,
         category,
@@ -140,6 +143,16 @@ const ProductEditScreen = () => {
                 placeholder="Enter price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="discountPrice">
+              <Form.Label>Discount Rate in Percentage</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter the discount rate"
+                value={discountPrice}
+                onChange={(e) => setDiscountPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

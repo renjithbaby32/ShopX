@@ -69,6 +69,7 @@ const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'Sample name',
     price: 0,
+    discountPrice: 0,
     user: req.user._id,
     image: '/images/sample.jpg',
     brand: 'Sample brand',
@@ -90,6 +91,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
     price,
+    discountPrice,
     description,
     image,
     brand,
@@ -105,6 +107,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   if (product) {
     product.name = name
     product.price = price
+    product.discountPrice = discountPrice
     product.description = description
     product.image = image
     product.brand = brand
@@ -167,7 +170,16 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route   GET /api/products/top
 // @access  Public
 const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(7)
+  const products = await Product.find({}).sort({ rating: -1 }).limit(6)
+
+  res.json(products)
+})
+
+// @desc    Get all the products that are on discount
+// @route   GET /api/products/productsOnDiscount
+// @access  Public
+const getProductsOnDiscount = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ discountPrice: -1 }).limit(4)
 
   res.json(products)
 })
@@ -181,4 +193,5 @@ export {
   createProductReview,
   getTopProducts,
   getProductsByCategory,
+  getProductsOnDiscount,
 }
