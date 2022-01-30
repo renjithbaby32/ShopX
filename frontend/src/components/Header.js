@@ -29,6 +29,29 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="first-nav">
+              <LinkContainer
+                className="px-3"
+                style={{ color: 'white' }}
+                to={`/category/smartphone`}
+              >
+                <Nav.Link>Smartphones</Nav.Link>
+              </LinkContainer>
+              <LinkContainer
+                className="px-3"
+                style={{ color: 'white' }}
+                to={`/category/laptop`}
+              >
+                <Nav.Link>Laptops</Nav.Link>
+              </LinkContainer>
+              <LinkContainer
+                className="px-3"
+                style={{ color: 'white' }}
+                to="/category/others"
+              >
+                <Nav.Link>Everything else</Nav.Link>
+              </LinkContainer>
+            </Nav>
             <Nav className="ml-auto">
               <SearchBox />
               {userInfo && (
@@ -75,7 +98,11 @@ const Header = () => {
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown
-                  title={<span style={{ color: 'white' }}>Admin</span>}
+                  title={
+                    <span style={{ color: 'white', paddingLeft: '1rem' }}>
+                      Admin
+                    </span>
+                  }
                   id="adminmenu"
                 >
                   <LinkContainer to="/admin/userlist">

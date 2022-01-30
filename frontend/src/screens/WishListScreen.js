@@ -5,6 +5,7 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../actions/cartActions'
 import { deleteFromWishlist, listWishlist } from '../actions/userActions'
+import Loader from '../components/Loader'
 
 const CartScreen = () => {
   const navigate = useNavigate()
@@ -34,8 +35,8 @@ const CartScreen = () => {
 
   return (
     <>
-      {loading && <h1>Loading...</h1>}
-      {error && <h1>Error</h1>}
+      {loading && <Loader />}
+      {error && <Message variant="danger">{error}</Message>}
       {wishlistItems && (
         <Row>
           <Col>

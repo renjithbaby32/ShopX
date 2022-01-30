@@ -17,6 +17,17 @@ h2 {
   padding: 0.5rem 0;
 }
 
+.rating {
+  min-height: 42px;
+}
+
+.header-searchbox {
+  max-height: 45px;
+}
+
+.card-image {
+  min-height: 226.66px;
+}
 .rating span {
   margin: 0.1rem;
 }
@@ -72,6 +83,11 @@ h2 {
 .fallback-home {
   color: green;
 }
+
+.first-nav {
+  margin-left: 1em;
+}
+
 /* 
 @media (max-width: 900px) {
   .carousel-caption h2 {

@@ -86,6 +86,7 @@ const App = () => {
               />
               <Route path="/search/:keyword" element={<HomeScreen />} exact />
               <Route path="/page/:pageNumber" element={<HomeScreen />} exact />
+              <Route path="/category/:id" element={<HomeScreen />} exact />
               <Route path="/" element={<HomeScreen />} exact />
               <Route path="/*" element={<FallbackScreen />} />
             </Routes>

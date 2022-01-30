@@ -8,12 +8,13 @@ import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 import Meta from '../components/Meta'
-import { listProducts } from '../actions/productActions'
+import { listProducts, getProductsByCategory } from '../actions/productActions'
 import { listWishlist } from '../actions/userActions'
 
 const HomeScreen = () => {
   const params = useParams()
   const keyword = params.keyword
+  const id = params.id
   const pageNumber = params.pageNumber
   const dispatch = useDispatch()
 
@@ -32,16 +33,20 @@ const HomeScreen = () => {
   } = wishlist
 
   useEffect(() => {
-    dispatch(listProducts(keyword, pageNumber))
+    if (id === 'smartphone' || id === 'laptop' || id === 'others') {
+      dispatch(getProductsByCategory(id))
+    } else {
+      dispatch(listProducts(keyword, pageNumber))
+    }
     if (userInfo) {
       dispatch(listWishlist())
     }
-  }, [dispatch, keyword, pageNumber])
+  }, [dispatch, keyword, pageNumber, id])
 
   return (
     <>
       <Meta title="Home | ShopX" />
-      {!keyword && <ProductCarousel />}
+      {!keyword && !id && <ProductCarousel />}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
