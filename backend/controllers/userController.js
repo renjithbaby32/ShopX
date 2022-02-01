@@ -194,7 +194,7 @@ const getWishListItems = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ _id: userId }).populate(
     'wishlist',
-    'name price image'
+    'name price image discountPrice'
   )
   res.json(user.wishlist)
 })

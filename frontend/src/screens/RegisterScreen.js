@@ -42,7 +42,7 @@ const RegisterScreen = () => {
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name">
+        <Form.Group controlId="name" className="py-1">
           <Form.Label>Name</Form.Label>
           <Form.Control
             type="name"
@@ -52,7 +52,7 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="email">
+        <Form.Group controlId="email" className="py-1">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type="email"
@@ -62,7 +62,7 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="password">
+        <Form.Group controlId="password" className="py-1">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
@@ -72,7 +72,7 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="confirmPassword">
+        <Form.Group controlId="confirmPassword" className="py-1">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
@@ -81,7 +81,7 @@ const RegisterScreen = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-        <div className= 'py-3'>
+        <div className="py-3">
           <Button type="submit" variant="info">
             Register
           </Button>

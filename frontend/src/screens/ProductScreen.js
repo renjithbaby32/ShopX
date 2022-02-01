@@ -198,7 +198,7 @@ const ProductScreen = () => {
                   )}
                   {userInfo ? (
                     <Form onSubmit={submitHandler}>
-                      <Form.Group controlId="rating">
+                      <Form.Group controlId="rating" className="py-1">
                         <Form.Label>Rating</Form.Label>
                         <Form.Control
                           as="select"
@@ -213,7 +213,7 @@ const ProductScreen = () => {
                           <option value="5">5 - Excellent</option>
                         </Form.Control>
                       </Form.Group>
-                      <Form.Group controlId="comment">
+                      <Form.Group controlId="comment" className="py-1 pb-2">
                         <Form.Label>Comment</Form.Label>
                         <Form.Control
                           as="textarea"

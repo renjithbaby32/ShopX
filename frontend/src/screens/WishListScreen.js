@@ -41,7 +41,6 @@ const CartScreen = () => {
         <Row>
           <Col>
             <h1>Wishlist</h1>
-            <h3>Current price may be different</h3>
             {wishlistItems.length === 0 ? (
               <Message>
                 Your wishlist is empty <Link to="/">Go Back</Link>
@@ -64,7 +63,14 @@ const CartScreen = () => {
                       <Col md={3}>
                         <Link to={`/product/${item._id}`}>{item.name}</Link>
                       </Col>
-                      <Col md={3}>&#x20b9;{item.price}</Col>
+                      <Col md={3}>
+                        &#x20b9;
+                        {item.discountPrice > 0
+                          ? item.price -
+                            item.discountPrice * 0.01 * item.price +
+                            `(${item.discountPrice}% off)`
+                          : item.price}
+                      </Col>
                       <Col>
                         <Button
                           type="button"

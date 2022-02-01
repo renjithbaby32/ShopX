@@ -126,7 +126,7 @@ const ProductEditScreen = () => {
           <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name">
+            <Form.Group className="py-1" controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="name"
@@ -136,7 +136,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="price">
+            <Form.Group className="py-1" controlId="price">
               <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
@@ -146,7 +146,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="discountPrice">
+            <Form.Group className="py-1" controlId="discountPrice">
               <Form.Label>Discount Rate in Percentage</Form.Label>
               <Form.Control
                 type="number"
@@ -156,9 +156,10 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="image">
+            <Form.Group className="py-1" controlId="image">
               <Form.Label>Image</Form.Label>
               <Form.Control
+                className="py-1"
                 type="text"
                 placeholder="Enter image url"
                 value={image}
@@ -180,7 +181,7 @@ const ProductEditScreen = () => {
               {uploading && <Loader />}
             </Form.Group>
 
-            <Form.Group controlId="brand">
+            <Form.Group className="py-1" controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
                 type="text"
@@ -190,7 +191,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <ListGroup.Item>
+            <ListGroup.Item className="py-1">
               <Row>
                 <Col>Category</Col>
                 <Col>
@@ -209,7 +210,7 @@ const ProductEditScreen = () => {
               </Row>
             </ListGroup.Item>
 
-            <Form.Group controlId="brand">
+            <Form.Group className="py-1" controlId="brand">
               <Form.Label>Sub-category</Form.Label>
               <Form.Control
                 type="text"
@@ -219,7 +220,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="countInStock">
+            <Form.Group className="py-1" controlId="countInStock">
               <Form.Label>Count In Stock</Form.Label>
               <Form.Control
                 type="number"
@@ -229,7 +230,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="rating">
+            <Form.Group className="py-1" controlId="rating">
               <Form.Label>Rating</Form.Label>
               <Form.Control
                 type="Number"
@@ -239,7 +240,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="numReviews">
+            <Form.Group className="py-1" controlId="numReviews">
               <Form.Label>Number of reviews</Form.Label>
               <Form.Control
                 type="Number"
@@ -249,7 +250,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group className="pb-3" controlId="description">
+            <Form.Group className="pb-3 py-1" controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
