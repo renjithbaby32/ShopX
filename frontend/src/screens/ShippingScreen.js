@@ -1,33 +1,76 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Card, Row, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { saveShippingAddress } from '../actions/cartActions'
+import { addToAddresses, listAddresses } from '../actions/userActions'
 
 const ShippingScreen = () => {
   const navigate = useNavigate()
-  const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
 
-  const [address, setAddress] = useState(shippingAddress.address)
-  const [city, setCity] = useState(shippingAddress.city)
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
-  const [country, setCountry] = useState(shippingAddress.country)
-
+  const addressList = useSelector((state) => state.addressList)
+  const { addresses } = addressList
   const dispatch = useDispatch()
+
+  const [address, setAddress] = useState()
+  const [city, setCity] = useState()
+  const [postalCode, setPostalCode] = useState()
+  const [country, setCountry] = useState()
+  const [addressSelected, setAddressSelected] = useState()
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(saveShippingAddress({ address, city, postalCode, country }))
+    dispatch(addToAddresses({ address, city, postalCode, country }))
     navigate('/payment')
   }
+
+  const addressSelector = (data) => {
+    console.log(data)
+    setAddressSelected(data)
+    if (addressSelected) {
+      dispatch(saveShippingAddress(addressSelected))
+      navigate('/payment')
+    }
+  }
+
+  useEffect(() => {
+    dispatch(listAddresses())
+  }, [])
 
   return (
     <FormContainer>
       <CheckoutSteps step1 step2 />
       <h1>Shipping</h1>
+      <Row>
+        {addresses.map((address) => (
+          <Col key={address._id} sm={12} md={6} lg={4} xl={3}>
+            <Card
+              onClick={(e) => {
+                e.preventDefault()
+                addressSelector({
+                  address: address.address,
+                  city: address.city,
+                  postalCode: address.postalCode,
+                  country: address.country,
+                })
+              }}
+              className="my-1 p-3 rounded mb-3"
+            >
+              <Card.Body>
+                <Card.Text as="div">{address.address}</Card.Text>
+                <Card.Text as="div">{address.city}</Card.Text>
+                <Card.Text as="div">{address.postalCode}</Card.Text>
+                <Card.Text as="div">{address.country}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
       <Form onSubmit={submitHandler} className="py-3">
         <Form.Group controlId="address">
           <Form.Label>Address</Form.Label>

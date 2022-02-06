@@ -22,6 +22,12 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import AddCategoryScreen from './screens/AddCategoryScreen'
+import OrderReportScreen from './screens/OrderReportScreen'
+import SalesReportScreen from './screens/SalesReportScreen'
+import OfferlistScreen from './screens/OfferlistScreen'
+import OfferEditScreen from './screens/OfferEditScreen'
+import CreateOfferScreen from './screens/CreateOfferScreen'
+import DashboardScreen from './screens/DashboardScreen'
 // import ProfileScreen from './screens/ProfileScreen'
 import FallbackScreen from './screens/FallbackScreen'
 const ProfileScreen = lazy(() => import('./screens/ProfileScreen'))
@@ -51,6 +57,7 @@ const App = () => {
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/register" element={<RegisterScreen />} />
                 <Route path="/product/:id" element={<ProductScreen />} />
+                <Route path="/admin/dashboard" element={<DashboardScreen />} />
                 <Route path="/admin/userlist" element={<UserListScreen />} />
                 <Route
                   path="/admin/categories"
@@ -88,6 +95,22 @@ const App = () => {
                   exact
                 />
                 <Route
+                  path="/admin/offers"
+                  element={<OfferlistScreen />}
+                  exact
+                />
+                <Route
+                  path="/admin/orderreport"
+                  element={<OrderReportScreen />}
+                  exact
+                />
+
+                <Route
+                  path="/admin/salesreport"
+                  element={<SalesReportScreen />}
+                  exact
+                />
+                <Route
                   path="/admin/productsbycategory/:id"
                   element={<ProductsByCategoryScreen />}
                   exact
@@ -95,6 +118,14 @@ const App = () => {
                 <Route
                   path="/admin/product/:id/edit"
                   element={<ProductEditScreen />}
+                />
+                <Route
+                  path="/admin/offers/:id/edit"
+                  element={<OfferEditScreen />}
+                />
+                <Route
+                  path="/admin/offers/create"
+                  element={<CreateOfferScreen />}
                 />
                 <Route path="/search/:keyword" element={<HomeScreen />} exact />
                 <Route

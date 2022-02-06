@@ -3,7 +3,11 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
-import { addToCart, removeFromCart } from '../actions/cartActions'
+import {
+  addToCart,
+  listCartItems,
+  removeFromCart,
+} from '../actions/cartActions'
 
 const CartScreen = () => {
   const data = useParams()
@@ -26,6 +30,8 @@ const CartScreen = () => {
     }
     if (productId) {
       dispatch(addToCart(productId, qty))
+    } else {
+      dispatch(listCartItems())
     }
   }, [dispatch, productId, qty])
 

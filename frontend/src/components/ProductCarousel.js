@@ -12,14 +12,10 @@ import {
 const ProductCarousel = () => {
   const dispatch = useDispatch()
 
-  // const productTopRated = useSelector((state) => state.productTopRated)
-  // const { loading, error, products } = productTopRated
-
   const productsOnDiscount = useSelector((state) => state.productsOnDiscount)
   const { loading, error, products } = productsOnDiscount
 
   useEffect(() => {
-    // dispatch(listTopProducts())
     dispatch(listProductsOnDiscount())
   }, [dispatch])
 

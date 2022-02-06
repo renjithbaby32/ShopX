@@ -6,6 +6,9 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import cartRoutes from './routes/cartRoutes.js'
+import offerRoutes from './routes/offerRoutes.js'
+import addressRoutes from './routes/addressRoutes.js'
 import morgan from 'morgan'
 import shortid from 'shortid'
 import categoryRoutes from './routes/categoryRoutes.js'
@@ -68,6 +71,9 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/categories', categoryRoutes)
+app.use('/api/cart', cartRoutes)
+app.use('/api/offer', offerRoutes)
+app.use('/api/address', addressRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

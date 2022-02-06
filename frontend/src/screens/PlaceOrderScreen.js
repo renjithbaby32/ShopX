@@ -7,12 +7,17 @@ import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
 import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 import { USER_DETAILS_RESET } from '../constants/userConstants'
+import { deductFromWallet, showWalletBalance } from '../actions/userActions'
+import { deleteCart } from '../actions/cartActions'
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
+
+  const wallet = useSelector((state) => state.wallet)
+  const { data } = wallet
 
   if (!cart.shippingAddress.address) {
     navigate('/shipping')
@@ -24,12 +29,20 @@ const PlaceOrderScreen = () => {
     return (Math.round(num * 100) / 100).toFixed(2)
   }
 
+  let walletUsed = 0
+  if (Number(cart.itemsPrice) + Number(cart.shippingPrice) - data > 0) {
+    walletUsed = data
+  } else {
+    walletUsed = Number(cart.itemsPrice) + Number(cart.shippingPrice)
+  }
   cart.itemsPrice = addDecimals(
     cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   cart.shippingPrice = addDecimals(cart.itemsPrice > 500 ? 0 : 40)
   cart.totalPrice = (
-    Number(cart.itemsPrice) + Number(cart.shippingPrice)
+    Number(cart.itemsPrice) +
+    Number(cart.shippingPrice) -
+    Number(walletUsed)
   ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
@@ -41,9 +54,12 @@ const PlaceOrderScreen = () => {
       dispatch({ type: USER_DETAILS_RESET })
       dispatch({ type: ORDER_CREATE_RESET })
     }
+    dispatch(showWalletBalance())
   }, [navigate, success])
 
   const placeOrderHandler = () => {
+    dispatch(deleteCart())
+    dispatch(deductFromWallet(walletUsed))
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -51,6 +67,7 @@ const PlaceOrderScreen = () => {
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
+        walletDiscount: walletUsed,
         totalPrice: cart.totalPrice,
       })
     )
@@ -132,7 +149,13 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col>Wallet Balance Used</Col>
+                  <Col>&#x20b9;{walletUsed}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Amount Payable</Col>
                   <Col>&#x20b9;{cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>

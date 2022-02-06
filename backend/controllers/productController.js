@@ -22,6 +22,12 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
+//function to get all the products
+const getAllProductsForReport = asyncHandler(async (req, res) => {
+  const products = await Product.find()
+  res.json({ products })
+})
+
 // @desc    Get products by category
 // @route   GET /api/products/category:id
 // @access  Public
@@ -194,4 +200,5 @@ export {
   getTopProducts,
   getProductsByCategory,
   getProductsOnDiscount,
+  getAllProductsForReport,
 }

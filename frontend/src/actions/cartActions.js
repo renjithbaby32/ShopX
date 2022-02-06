@@ -4,36 +4,88 @@ import {
   CART_REMOVE_ITEM,
   CART_SAVE_SHIPPING_ADDRESS,
   CART_SAVE_PAYMENT_METHOD,
+  SHOW_CART_ITEM,
 } from '../constants/cartConstants'
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
   const { data } = await axios.get(`/api/products/${id}`)
 
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+  const cart = {
+    user: userInfo._id,
+    product: data._id,
+    qty,
+    name: data.name,
+    price: data.price,
+    image: data.image,
+    countInStock: data.countInStock,
+  }
+
+  const response = await axios.post('/api/cart', cart, config)
   dispatch({
     type: CART_ADD_ITEM,
-    payload: {
-      product: data._id,
-      name: data.name,
-      image: data.image,
-      price:
-        data.discountPrice > 0
-          ? data.price - data.price * 0.01 * data.discountPrice
-          : data.price,
-      countInStock: data.countInStock,
-      qty,
-    },
+    payload: response.data,
   })
-
-  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
 
-export const removeFromCart = (id) => (dispatch, getState) => {
+export const removeFromCart = (id) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+  const { data } = await axios.delete(
+    `/api/cart/${userInfo._id}?productId=${id}`,
+    config
+  )
+
   dispatch({
     type: CART_REMOVE_ITEM,
     payload: id,
   })
+}
 
-  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+export const deleteCart = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+  await axios.delete(`/api/cart/checkout/${userInfo._id}`, config)
+}
+
+export const listCartItems = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+  const { data } = await axios.get(`/api/cart/${userInfo._id}`, config)
+
+  dispatch({
+    type: SHOW_CART_ITEM,
+    payload: data,
+  })
 }
 
 export const saveShippingAddress = (data) => (dispatch) => {

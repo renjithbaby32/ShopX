@@ -14,6 +14,8 @@ import {
   listTopProducts,
 } from '../actions/productActions'
 import { listWishlist } from '../actions/userActions'
+import { listOffers } from '../actions/offerActions'
+import OfferCarousel from '../components/OfferCarousel'
 
 const HomeScreen = () => {
   const params = useParams()
@@ -28,13 +30,15 @@ const HomeScreen = () => {
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, page, pages } = productList
 
+  const offerList = useSelector((state) => state.offerList)
+  const { loading: listLoadng, error: listError, offers } = offerList
+
   const productTopRated = useSelector((state) => state.productTopRated)
   const {
     loading: topRatedProductsLoading,
     error: topRatedProductsError,
     products: topRatedProducts,
   } = productTopRated
-  console.log(topRatedProducts)
 
   const wishlist = useSelector((state) => state.wishlist)
   const {
@@ -49,6 +53,7 @@ const HomeScreen = () => {
       dispatch(getProductsByCategory(id))
     } else {
       dispatch(listProducts(keyword, pageNumber))
+      dispatch(listOffers())
       dispatch(listTopProducts())
     }
     if (userInfo) {
@@ -60,10 +65,7 @@ const HomeScreen = () => {
     <>
       <Meta title="Home | ShopX" />
       {!keyword && !id && (
-        <>
-          <h1>Products On Discount</h1>
-          <ProductCarousel />
-        </>
+        <>{offers.length === 0 ? <ProductCarousel /> : <OfferCarousel />}</>
       )}
 
       <>

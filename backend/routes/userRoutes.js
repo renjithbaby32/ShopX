@@ -12,10 +12,22 @@ import {
   addItemToWishlist,
   getWishListItems,
   deleteItemFromWishlist,
+  checkReferralId,
+  addReferralId,
+  getReferralId,
+  showWalletBalance,
+  deductWalletBalance,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
+router.put('/wallet/:amount', protect, deductWalletBalance)
+router.route('/wallet').get(protect, showWalletBalance)
+router
+  .route('/referral')
+  .get(protect, getReferralId)
+  .post(protect, addReferralId)
+  .put(protect, checkReferralId)
 router.post('/login', authUser)
 router
   .route('/profile')

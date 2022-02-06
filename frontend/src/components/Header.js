@@ -104,6 +104,9 @@ const Header = () => {
                   }
                   id="adminmenu"
                 >
+                  <LinkContainer to="/admin/dashboard">
+                    <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                  </LinkContainer>
                   <LinkContainer to="/admin/userlist">
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>
@@ -113,8 +116,17 @@ const Header = () => {
                   <LinkContainer to="/admin/orderlist">
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to="/admin/offers">
+                    <NavDropdown.Item>Offers</NavDropdown.Item>
+                  </LinkContainer>
                   <LinkContainer to="/admin/categories">
                     <NavDropdown.Item>Categories</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/orderreport">
+                    <NavDropdown.Item>Order Report</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/salesreport">
+                    <NavDropdown.Item>Sales Report</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               )}

@@ -9,10 +9,14 @@ import {
   getOrderDetails,
   payOrder,
   deliverOrder,
+  dispatchOrder,
+  outForDeliveryOrder,
 } from '../actions/orderActions'
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
+  ORDER_DISPATCH_RESET,
+  ORDER_OUT_FOR_DELIVERY_RESET,
 } from '../constants/orderConstants'
 
 const OrderScreen = () => {
@@ -33,6 +37,13 @@ const OrderScreen = () => {
 
   const orderDeliver = useSelector((state) => state.orderDeliver)
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
+  const orderDispatch = useSelector((state) => state.orderDispatch)
+  const { loading: loadingDispatch, success: successDispatch } = orderDispatch
+
+  const orderOutForDelivery = useSelector((state) => state.orderOutForDelivery)
+  const { loading: loadingOutForDelivery, success: successOutForDelivery } =
+    orderOutForDelivery
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -71,9 +82,6 @@ const OrderScreen = () => {
     }
 
     const { data } = await axios.post(`/razorpay/${orderId}`)
-    console.time('data')
-    console.log(data)
-    console.timeEnd('data')
 
     const options = {
       key: 'rzp_test_w4t1UiRN2QYw07',
@@ -108,9 +116,18 @@ const OrderScreen = () => {
       navigate('/login')
     }
 
-    if (!order || successPay || successDeliver || order._id !== orderId) {
+    if (
+      !order ||
+      successPay ||
+      successDeliver ||
+      successDispatch ||
+      successOutForDelivery ||
+      order._id !== orderId
+    ) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch({ type: ORDER_DELIVER_RESET })
+      dispatch({ type: ORDER_DISPATCH_RESET })
+      dispatch({ type: ORDER_OUT_FOR_DELIVERY_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -118,7 +135,15 @@ const OrderScreen = () => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, orderId, successPay, successDeliver, order])
+  }, [
+    dispatch,
+    orderId,
+    successPay,
+    successDeliver,
+    successDispatch,
+    successOutForDelivery,
+    order,
+  ])
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult))
@@ -128,6 +153,14 @@ const OrderScreen = () => {
     dispatch(deliverOrder(order))
   }
 
+  const dispatchHandler = () => {
+    dispatch(dispatchOrder(order))
+  }
+
+  const outForDeliveryHandler = () => {
+    dispatch(outForDeliveryOrder(order))
+  }
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -135,6 +168,25 @@ const OrderScreen = () => {
   ) : (
     <>
       <h1>Order {order._id}</h1>
+      <h2>
+        Status
+        {order.isDelivered ? (
+          <h2 className="text-success">Delivered</h2>
+        ) : order.isOutForDelivery ? (
+          <h2 className="text-info">
+            Out for delivery<span> - Expect delivery today</span>
+          </h2>
+        ) : order.isDispatched ? (
+          <>
+            <h2 className="text-info">
+              Dispatched<span> - Expect delivery in 2-4 days</span>
+            </h2>
+          </>
+        ) : (
+          <h2>Waiting for dispatch</h2>
+        )}
+      </h2>
+
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
@@ -229,8 +281,10 @@ const OrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
-                  <Col>&#x20b9;{order.taxPrice}</Col>
+                  <Col>Wallet Discount</Col>
+                  <Col>
+                    &#x20b9;{order.walletDiscount ? order.walletDiscount : 0}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -248,19 +302,41 @@ const OrderScreen = () => {
               )}
               {loadingDeliver && <Loader />}
               {userInfo &&
+              userInfo.isAdmin &&
+              order.isDelivered ? null : userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item>
-                    <Button
-                      type="button"
-                      className="btn btn-block"
-                      onClick={deliverHandler}
-                    >
-                      Mark As Delivered
-                    </Button>
-                  </ListGroup.Item>
-                )}
+                order.isOutForDelivery ? (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              ) : userInfo && userInfo.isAdmin && order.isDispatched ? (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={outForDeliveryHandler}
+                  >
+                    Mark As Out For Delivery
+                  </Button>
+                </ListGroup.Item>
+              ) : userInfo && userInfo.isAdmin ? (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={dispatchHandler}
+                  >
+                    Mark As Dispatched
+                  </Button>
+                </ListGroup.Item>
+              ) : null}
             </ListGroup>
           </Card>
         </Col>

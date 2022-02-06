@@ -36,6 +36,10 @@ h2 {
   min-height: 48px;
 }
 
+.datebutton {
+  margin-top: 1.5rem;
+}
+
 /* carousel */
 .carousel-item-next,
 .carousel-item-prev,
@@ -52,10 +56,9 @@ h2 {
 }
 
 .carousel img {
-  height: 400px;
+  height: 500px;
   padding: 30px;
   margin: 40px;
-  border-radius: 25%;
   margin-left: auto;
   margin-right: auto;
 }

@@ -34,6 +34,11 @@ import {
   DELETE_FROM_WISHLIST_REQUEST,
   DELETE_FROM_WISHLIST_SUCCESS,
   DELETE_FROM_WISHLIST_FAIL,
+  SHOW_REFERRAL_CODE,
+  SHOW_WALLET_BALANCE,
+  DEDUCT_FROM_WALLET,
+  LOAD_ADDRESSES,
+  ADD_ADDRESS,
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -161,6 +166,37 @@ export const wishListReducer = (state = { wishlistItems: [] }, action) => {
       return { loading: false, successDelete: true }
     case DELETE_FROM_WISHLIST_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const referralIdReducer = (state = { id: [] }, action) => {
+  switch (action.type) {
+    case SHOW_REFERRAL_CODE:
+      return { id: action.payload }
+    default:
+      return state
+  }
+}
+
+export const walletIdReducer = (state = { data: [] }, action) => {
+  switch (action.type) {
+    case SHOW_WALLET_BALANCE:
+      return { data: action.payload }
+    case DEDUCT_FROM_WALLET:
+      return state
+    default:
+      return state
+  }
+}
+
+export const addressListReducer = (state = { addresses: [] }, action) => {
+  switch (action.type) {
+    case LOAD_ADDRESSES:
+      return { ...state, addresses: action.payload }
+    case ADD_ADDRESS:
+      return { ...state, addedAddress: true }
     default:
       return state
   }

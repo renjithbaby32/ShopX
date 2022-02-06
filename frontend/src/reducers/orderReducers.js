@@ -21,6 +21,14 @@ import {
   ORDER_DELIVER_REQUEST,
   ORDER_DELIVER_RESET,
   ORDER_CREATE_RESET,
+  ORDER_DISPATCH_REQUEST,
+  ORDER_DISPATCH_SUCCESS,
+  ORDER_DISPATCH_FAIL,
+  ORDER_DISPATCH_RESET,
+  ORDER_OUT_FOR_DELIVERY_REQUEST,
+  ORDER_OUT_FOR_DELIVERY_SUCCESS,
+  ORDER_OUT_FOR_DELIVERY_FAIL,
+  ORDER_OUT_FOR_DELIVERY_RESET,
 } from '../constants/orderConstants'
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -112,6 +120,52 @@ export const orderDeliverReducer = (state = {}, action) => {
         error: action.payload,
       }
     case ORDER_DELIVER_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export const orderDispatchReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_DISPATCH_REQUEST:
+      return {
+        loading: true,
+      }
+    case ORDER_DISPATCH_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case ORDER_DISPATCH_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+    case ORDER_DISPATCH_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export const orderOutForDeliveryReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_OUT_FOR_DELIVERY_REQUEST:
+      return {
+        loading: true,
+      }
+    case ORDER_OUT_FOR_DELIVERY_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      }
+    case ORDER_OUT_FOR_DELIVERY_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      }
+    case ORDER_OUT_FOR_DELIVERY_RESET:
       return {}
     default:
       return state

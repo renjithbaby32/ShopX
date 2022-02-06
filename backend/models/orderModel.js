@@ -46,6 +46,11 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: 0.0,
     },
+    walletDiscount: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
     totalPrice: {
       type: Number,
       required: true,
@@ -57,6 +62,30 @@ const orderSchema = mongoose.Schema(
       default: false,
     },
     paidAt: {
+      type: Date,
+    },
+    isPaid: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    paidAt: {
+      type: Date,
+    },
+    isDispatched: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    dispatchedAt: {
+      type: Date,
+    },
+    isOutForDelivery: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    outForDelivery: {
       type: Date,
     },
     isDelivered: {

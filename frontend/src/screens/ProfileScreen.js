@@ -5,7 +5,12 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails, updateUserProfile } from '../actions/userActions'
+import {
+  getUserDetails,
+  showReferralCode,
+  showWalletBalance,
+  updateUserProfile,
+} from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
@@ -27,6 +32,12 @@ const ProfileScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
+  const referralId = useSelector((state) => state.referralId)
+  const { id } = referralId
+
+  const wallet = useSelector((state) => state.wallet)
+  const { data } = wallet
+
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
   const { success } = userUpdateProfile
 
@@ -40,6 +51,8 @@ const ProfileScreen = () => {
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails('profile'))
+        dispatch(showReferralCode())
+        dispatch(showWalletBalance())
         dispatch(listMyOrders())
       } else {
         setName(user.name)
@@ -113,6 +126,25 @@ const ProfileScreen = () => {
             <Button type="submit" variant="success">
               Update
             </Button>
+            <p className="my-3">
+              Your wallet balance<br></br>
+            </p>
+            <p style={{ fontSize: '2rem', color: 'green' }}>
+              &#x20b9;{data ? data : 0}
+            </p>
+
+            <p className="my-3">
+              Your shareable referral code is <br></br>
+            </p>
+            {id.map((id) => (
+              <p key={id._id} style={{ fontSize: '2rem', color: 'green' }}>
+                {id.referralId}
+              </p>
+            ))}
+            <p className="my-3">
+              Share this code with your friends and you both get &#x20b9;500
+              when your friend registers for a free account<br></br>
+            </p>
           </Form>
         )}
       </Col>

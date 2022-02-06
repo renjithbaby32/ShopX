@@ -33,6 +33,11 @@ import {
   DELETE_FROM_WISHLIST_REQUEST,
   DELETE_FROM_WISHLIST_SUCCESS,
   DELETE_FROM_WISHLIST_FAIL,
+  SHOW_REFERRAL_CODE,
+  SHOW_WALLET_BALANCE,
+  DEDUCT_FROM_WALLET,
+  LOAD_ADDRESSES,
+  ADD_ADDRESS,
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
@@ -82,45 +87,60 @@ export const logout = () => (dispatch) => {
   document.location.href = '/login'
 }
 
-export const register = (name, email, password) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_REGISTER_REQUEST,
-    })
+export const register =
+  (name, email, password, referralId) => async (dispatch, getState) => {
+    let token
+    try {
+      dispatch({
+        type: USER_REGISTER_REQUEST,
+      })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.post(
+        '/api/users',
+        { name, email, password },
+        config
+      )
+      token = data.token
+
+      dispatch({
+        type: USER_REGISTER_SUCCESS,
+        payload: data,
+      })
+
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data,
+      })
+
+      const configB = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      if (referralId.length > 0) {
+        await axios.put('/api/users/referral', { referralId }, configB)
+      }
+
+      await axios.post('/api/users/referral', { referralId }, configB)
+
+      localStorage.setItem('userInfo', JSON.stringify(data))
+    } catch (error) {
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
     }
-
-    const { data } = await axios.post(
-      '/api/users',
-      { name, email, password },
-      config
-    )
-
-    dispatch({
-      type: USER_REGISTER_SUCCESS,
-      payload: data,
-    })
-
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    })
-
-    localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
   }
-}
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
@@ -410,4 +430,93 @@ export const deleteFromWishlist = (productId) => async (dispatch, getState) => {
       payload: message,
     })
   }
+}
+
+export const showReferralCode = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  const { data } = await axios.get(`/api/users/referral`, config)
+  dispatch({
+    type: SHOW_REFERRAL_CODE,
+    payload: data,
+  })
+}
+
+export const showWalletBalance = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  const { data } = await axios.get(`/api/users/wallet`, config)
+  dispatch({
+    type: SHOW_WALLET_BALANCE,
+    payload: data,
+  })
+}
+
+export const deductFromWallet = (amount) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  const { data } = await axios.put(`/api/users/wallet/${amount}`, {}, config)
+  dispatch({
+    type: DEDUCT_FROM_WALLET,
+    payload: data,
+  })
+}
+
+export const listAddresses = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  const { data } = await axios.get(`/api/address/${userInfo._id}`, config)
+  dispatch({
+    type: LOAD_ADDRESSES,
+    payload: data,
+  })
+}
+
+export const addToAddresses = (address) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  await axios.post(`/api/address/${userInfo._id}`, address, config)
+  dispatch({
+    type: ADD_ADDRESS,
+  })
 }
