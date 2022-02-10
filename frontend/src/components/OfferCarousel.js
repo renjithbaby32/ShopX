@@ -49,6 +49,7 @@ const OfferCarousel = () => {
               }
               alt=""
               fluid
+              className="image-test"
             />
             <Carousel.Caption className="carousel-caption">
               <h2>
