@@ -40,9 +40,6 @@ const getOrder = async (id) => {
 
 app.post('/razorpay/:id', async (req, res) => {
   const order = await getOrder(req.params.id)
-  order.isPaid = true
-  order.paidAt = Date.now()
-  await order.save()
   const payment_capture = 1
   const amount = 500
   const currency = 'INR'
@@ -64,6 +61,14 @@ app.post('/razorpay/:id', async (req, res) => {
   } catch (err) {
     console.log(err)
   }
+})
+
+app.post('/razorpay/success/:id', async (req, res) => {
+  const order = await getOrder(req.params.id)
+  order.isPaid = true
+  order.paidAt = Date.now()
+  await order.save()
+  res.status(200).json('success')
 })
 
 app.use('/api/products', productRoutes)

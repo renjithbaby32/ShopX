@@ -62,7 +62,14 @@ const CartScreen = () => {
                   <Col md={3}>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
-                  <Col md={2}>&#x20b9;{item.price}</Col>
+                  <Col md={2}>
+                    &#x20b9;
+                    {item.product.discountPrice > 0
+                      ? item.product.price -
+                        item.product.discountPrice * 0.01 * item.product.price +
+                        `(${item.product.discountPrice}% off)`
+                      : item.product.price}
+                  </Col>
                   <Col md={2}>
                     <Form.Control
                       as="select"
@@ -84,7 +91,7 @@ const CartScreen = () => {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => removeFromCartHandler(item.product)}
+                      onClick={() => removeFromCartHandler(item.product._id)}
                     >
                       <i className="fas fa-trash"></i>
                     </Button>
@@ -105,7 +112,16 @@ const CartScreen = () => {
               </h2>
               &#x20b9;
               {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .reduce(
+                  (acc, item) =>
+                    acc +
+                    item.qty *
+                      (item.product.discountPrice
+                        ? item.product.price -
+                          item.product.discountPrice * 0.01 * item.product.price
+                        : item.product.price),
+                  0
+                )
                 .toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>

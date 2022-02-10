@@ -40,9 +40,11 @@ const OfferCarousel = () => {
               roundedCircle={false}
               src={
                 product.category === 'laptop'
-                  ? 'https://assetscdn1.paytm.com/images/catalog/view_item/684730/1617042234651.png?imwidth=1600&impolicy=hq'
+                  ? // ? 'https://assetscdn1.paytm.com/images/catalog/view_item/684730/1617042234651.png?imwidth=1600&impolicy=hq'
+                    'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Desktops/Lenovo/Feb/1242x450_lenovo_desk.jpg'
                   : product.category === 'smartphone'
-                  ? 'https://www.gizbot.com/img/600x90/img/2020/05/amazon-special-offers-on-best-smartphones-after-lock-down-period-1589946628.jpg'
+                  ? // ? 'https://www.gizbot.com/img/600x90/img/2020/05/amazon-special-offers-on-best-smartphones-after-lock-down-period-1589946628.jpg'
+                    'https://images-eu.ssl-images-amazon.com/images/G/31/img21/Wireless/WLA/Feb22/AccPage/Attach/D38687335_WLA_Attach_banners_Acc_Mob_Hero_1242x450_2.jpg'
                   : 'https://cloudfour.com/examples/img-currentsrc/images/kitten-large.png'
               }
               alt=""

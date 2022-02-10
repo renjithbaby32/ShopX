@@ -17,10 +17,13 @@ import {
   getReferralId,
   showWalletBalance,
   deductWalletBalance,
+  forgotPassword,
+  updateUserPassword,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
+router.route('/forgotPassword').post(forgotPassword).put(updateUserPassword)
 router.put('/wallet/:amount', protect, deductWalletBalance)
 router.route('/wallet').get(protect, showWalletBalance)
 router

@@ -29,7 +29,6 @@ const ShippingScreen = () => {
   }
 
   const addressSelector = (data) => {
-    console.log(data)
     setAddressSelected(data)
     if (addressSelected) {
       dispatch(saveShippingAddress(addressSelected))

@@ -3,6 +3,15 @@ import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
 import ReferralId from '../models/referralIdModel.js'
 import Wallet from '../models/walletModel.js'
+import dotenv from 'dotenv'
+import twilio from 'twilio'
+
+dotenv.config()
+
+const accontSid = process.env.ACCOUNT_SID
+const authToken = process.env.AUTH_TOKEN
+
+const client = twilio(accontSid, authToken)
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -34,7 +43,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, password, phone } = req.body
 
   const userExists = await User.findOne({ email })
 
@@ -47,6 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+    phone,
   })
 
   if (user) {
@@ -56,6 +66,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      phone: user.phone,
     })
   } else {
     res.status(400)
@@ -158,6 +169,11 @@ const updateUser = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email
     user.isAdmin = req.body.isAdmin
     user.isBlocked = req.body.isBlocked
+    if (req.body.phone) {
+      user.phone = req.body.phone
+    } else {
+      user.phone = 1212121212
+    }
 
     const updatedUser = await user.save()
 
@@ -326,6 +342,47 @@ const deductWalletBalance = asyncHandler(async (req, res) => {
   res.json('success')
 })
 
+// @desc    Get user profile by email and send OTP to phone number if the user forgets the password
+// @route   POST /api/users/forgotPassword
+// @access  Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email })
+
+  if (user) {
+    const otp = Math.floor(100000 + Math.random() * 900000)
+    client.messages
+      .create({
+        to: `+91${user.phone}`,
+        from: process.env.TWILIO_NUMBER,
+        body: otp,
+      })
+      .then((message) => console.log(message.sid))
+
+    res.json({ userId: user._id, otp })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+// @desc    Update user password
+// @route   PUT /api/users/forgotPassword
+// @access  Public
+const updateUserPassword = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email })
+
+  if (user) {
+    user.password = req.body.password
+
+    const updatedUser = await user.save()
+
+    res.json('success')
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
 export {
   authUser,
   registerUser,
@@ -343,4 +400,6 @@ export {
   getReferralId,
   showWalletBalance,
   deductWalletBalance,
+  forgotPassword,
+  updateUserPassword,
 }

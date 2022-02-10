@@ -88,7 +88,7 @@ export const logout = () => (dispatch) => {
 }
 
 export const register =
-  (name, email, password, referralId) => async (dispatch, getState) => {
+  (name, email, password, referralId, phone) => async (dispatch, getState) => {
     let token
     try {
       dispatch({
@@ -103,7 +103,7 @@ export const register =
 
       const { data } = await axios.post(
         '/api/users',
-        { name, email, password },
+        { name, email, password, phone },
         config
       )
       token = data.token

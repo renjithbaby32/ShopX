@@ -96,6 +96,10 @@ h2 {
   margin-left: 1em;
 }
 
+.sample {
+  z-index: 1200;
+}
+
 /* 
 @media (max-width: 900px) {
   .carousel-caption h2 {

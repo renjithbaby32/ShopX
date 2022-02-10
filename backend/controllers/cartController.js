@@ -22,7 +22,12 @@ const addCartItem = asyncHandler(async (req, res) => {
     })
     const createdCartItem = await item.save()
 
-    res.status(201).json(createdCartItem)
+    const updatedItems = await createdCartItem.populate(
+      'product',
+      'price discountPrice'
+    )
+
+    res.status(201).json(updatedItems)
   }
 })
 
@@ -32,6 +37,8 @@ const addCartItem = asyncHandler(async (req, res) => {
 const getCartItems = asyncHandler(async (req, res) => {
   const userId = req.params.userId
   const cartItems = await Cart.find({ user: userId })
+    .sort({ createdAt: -1 })
+    .populate('product', 'price discountPrice')
 
   res.status(200).json(cartItems)
 })

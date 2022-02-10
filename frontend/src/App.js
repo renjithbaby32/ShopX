@@ -28,6 +28,7 @@ import OfferlistScreen from './screens/OfferlistScreen'
 import OfferEditScreen from './screens/OfferEditScreen'
 import CreateOfferScreen from './screens/CreateOfferScreen'
 import DashboardScreen from './screens/DashboardScreen'
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen'
 // import ProfileScreen from './screens/ProfileScreen'
 import FallbackScreen from './screens/FallbackScreen'
 const ProfileScreen = lazy(() => import('./screens/ProfileScreen'))
@@ -134,6 +135,10 @@ const App = () => {
                   exact
                 />
                 <Route path="/category/:id" element={<HomeScreen />} exact />
+                <Route
+                  path="/forgotPassword"
+                  element={<ForgotPasswordScreen />}
+                />
                 <Route path="/" element={<HomeScreen />} exact />
                 <Route path="/*" element={<FallbackScreen />} />
               </Routes>

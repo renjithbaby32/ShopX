@@ -40,7 +40,6 @@ const PaymentScreen = () => {
               id="PayPal"
               name="paymentMethod"
               value="PayPal"
-              checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check
@@ -50,6 +49,7 @@ const PaymentScreen = () => {
               id="razorpay"
               name="paymentMethod"
               value="razorpay"
+              checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check

@@ -36,7 +36,16 @@ const PlaceOrderScreen = () => {
     walletUsed = Number(cart.itemsPrice) + Number(cart.shippingPrice)
   }
   cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    cart.cartItems.reduce(
+      (acc, item) =>
+        acc +
+        (item.product.discountPrice
+          ? item.product.price -
+            item.product.discountPrice * 0.01 * item.product.price
+          : item.product.price) *
+          item.qty,
+      0
+    )
   )
   cart.shippingPrice = addDecimals(cart.itemsPrice > 500 ? 0 : 40)
   cart.totalPrice = (
@@ -118,8 +127,21 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x &#x20b9;{item.price} = &#x20b9;
-                          {item.qty * item.price}
+                          {item.qty} x &#x20b9;
+                          {item.product.discountPrice
+                            ? item.product.price -
+                              item.product.discountPrice *
+                                0.01 *
+                                item.product.price
+                            : item.product.price}
+                          = &#x20b9;
+                          {item.qty *
+                            (item.product.discountPrice
+                              ? item.product.price -
+                                item.product.discountPrice *
+                                  0.01 *
+                                  item.product.price
+                              : item.product.price)}
                         </Col>
                       </Row>
                     </ListGroup.Item>

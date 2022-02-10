@@ -14,16 +14,7 @@ export const listOffers = () => async (dispatch, getState) => {
       type: OFFERLIST_REQUEST,
     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
-    const { data } = await axios.get(`/api/offer`, config)
+    const { data } = await axios.get(`/api/offer`)
 
     dispatch({
       type: OFFERLIST_SUCCESS,

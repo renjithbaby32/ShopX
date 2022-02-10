@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import ReactImageMagnify from 'react-image-magnify'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
@@ -82,7 +83,22 @@ const ProductScreen = () => {
         <>
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              {/* <Image src={product.image} alt={product.name} fluid /> */}
+              <ReactImageMagnify
+                className="sample"
+                {...{
+                  smallImage: {
+                    alt: 'Product Image',
+                    isFluidWidth: true,
+                    src: product.image,
+                  },
+                  largeImage: {
+                    src: product.image,
+                    width: 1200,
+                    height: 1200,
+                  },
+                }}
+              />
             </Col>
             <Col md={3}>
               <ListGroup variant="flush">

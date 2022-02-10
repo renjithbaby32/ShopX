@@ -17,6 +17,7 @@ import {
   ORDER_DELIVER_RESET,
   ORDER_DISPATCH_RESET,
   ORDER_OUT_FOR_DELIVERY_RESET,
+  ORDER_PAY_SUCCESS,
 } from '../constants/orderConstants'
 
 const OrderScreen = () => {
@@ -54,9 +55,9 @@ const OrderScreen = () => {
       return (Math.round(num * 100) / 100).toFixed(2)
     }
 
-    order.itemsPrice = addDecimals(
-      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-    )
+    // order.itemsPrice = addDecimals(
+    //   order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    // )
   }
 
   function loadScript(src) {
@@ -91,7 +92,9 @@ const OrderScreen = () => {
       name: 'ShopX',
       description: 'Make the payment to complete the process',
       image: '',
-      handler: function (response) {
+      handler: async (response) => {
+        await axios.post(`/razorpay/success/${orderId}`)
+        dispatch({ type: ORDER_PAY_SUCCESS })
         // alert(response.razorpay_payment_id);
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature);
@@ -106,9 +109,9 @@ const OrderScreen = () => {
     }
     const paymentObject = new window.Razorpay(options)
     paymentObject.open()
-    dispatch({
-      type: 'ORDER_DELIVER_SUCCESS',
-    })
+    // dispatch({
+    //   type: 'ORDER_DELIVER_SUCCESS',
+    // })
   }
 
   useEffect(() => {
@@ -167,7 +170,7 @@ const OrderScreen = () => {
     <Message variant="danger">{error}</Message>
   ) : (
     <>
-      <h1>Order {order._id}</h1>
+      <h3>Order {order._id}</h3>
       <h2>
         Status
         {order.isDelivered ? (

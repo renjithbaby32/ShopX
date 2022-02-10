@@ -16,6 +16,13 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: Number,
+      required: true,
+      minLength: 10,
+      maxLength: 10,
+      default: 1212121212,
+    },
     isAdmin: {
       type: Boolean,
       required: true,
