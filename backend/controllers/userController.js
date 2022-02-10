@@ -8,10 +8,10 @@ import twilio from 'twilio'
 
 dotenv.config()
 
-const accontSid = process.env.ACCOUNT_SID
+const accountSid = process.env.ACCOUNT_SID
 const authToken = process.env.AUTH_TOKEN
 
-const client = twilio(accontSid, authToken)
+const client = twilio(accountSid, authToken)
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
