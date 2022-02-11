@@ -15,7 +15,7 @@ const PaymentScreen = () => {
     navigate('/shipping')
   }
 
-  const [paymentMethod, setPaymentMethod] = useState('PayPal')
+  const [paymentMethod, setPaymentMethod] = useState('Razorpay')
 
   const dispatch = useDispatch()
 

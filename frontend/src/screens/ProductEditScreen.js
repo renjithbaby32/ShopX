@@ -21,6 +21,7 @@ const ProductEditScreen = () => {
   const [price, setPrice] = useState(0)
   const [discountPrice, setDiscountPrice] = useState(0)
   const [image, setImage] = useState('')
+  const [images, setImages] = useState([])
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
   const [subCategory, setSubCategory] = useState('')
@@ -91,23 +92,56 @@ const ProductEditScreen = () => {
     }
   }
 
+  const multiFileUploadHandler = async (e) => {
+    const files = Array.from(e.target.files)
+    setImages([])
+
+    files.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((oldArray) => [...oldArray, reader.result])
+        }
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
+    const formData = new FormData()
+    formData.set('name', name)
+    formData.set('price', price)
+    formData.set('discountPrice', discountPrice)
+    formData.set('countInStock', countInStock)
+    formData.set('image', image)
+    formData.set('brand', brand)
+    formData.set('rating', rating)
+    formData.set('category', category)
+    formData.set('subCategory', subCategory)
+    formData.set('description', description)
+    formData.set('numReviews', numReviews)
+    images.forEach((image) => {
+      formData.append('images', image)
+    })
     dispatch(
-      updateProduct({
-        _id: productId,
-        name,
-        price,
-        discountPrice,
-        image,
-        brand,
-        category,
-        subCategory,
-        rating,
-        description,
-        countInStock,
-        numReviews,
-      })
+      updateProduct(formData, productId)
+      // {
+      //   _id: productId,
+      //   name,
+      //   price,
+      //   discountPrice,
+      //   image,
+      //   formData,
+      //   brand,
+      //   category,
+      //   subCategory,
+      //   rating,
+      //   description,
+      //   countInStock,
+      //   numReviews,
+      // }
     )
   }
 
@@ -156,7 +190,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group className="py-1" controlId="image">
+            <Form.Group className="py-1">
               <Form.Label>Image</Form.Label>
               <Form.Control
                 className="py-1"
@@ -165,18 +199,25 @@ const ProductEditScreen = () => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-              {/* <Form.File
-                id='image-file'
-                label='Choose File'
-                custom
-                onChange={uploadFileHandler}
-              ></Form.File> */}
               <FormControl
                 type="file"
                 id="image-file"
                 label="Choose File"
                 custom
                 onChange={uploadFileHandler}
+              />
+              {uploading && <Loader />}
+            </Form.Group>
+
+            <Form.Group className="py-1">
+              <Form.Label>Add extra images</Form.Label>
+              <FormControl
+                type="file"
+                id="image-files"
+                label="Choose Files"
+                custom
+                multiple
+                onChange={multiFileUploadHandler}
               />
               {uploading && <Loader />}
             </Form.Group>

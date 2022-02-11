@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import cloudinary from 'cloudinary'
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -78,6 +79,7 @@ const createProduct = asyncHandler(async (req, res) => {
     discountPrice: 0,
     user: req.user._id,
     image: '/images/sample.jpg',
+    images: [],
     brand: 'Sample brand',
     category: 'Sample category',
     subCategory: 'unavailbale',
@@ -108,6 +110,29 @@ const updateProduct = asyncHandler(async (req, res) => {
     numReviews,
   } = req.body
 
+  let images = []
+  if (typeof req.body.images === 'string') {
+    images.push(req.body.images)
+  } else {
+    images = req.body.images
+  }
+
+  let imagesLinks = []
+
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.v2.uploader.upload(images[i], {
+      folder: 'products',
+      // width: 150,
+      // height: 150,
+      crop: 'scale',
+    })
+    imagesLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    })
+  }
+  req.body.images = imagesLinks
+
   const product = await Product.findById(req.params.id)
 
   if (product) {
@@ -116,6 +141,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.discountPrice = discountPrice
     product.description = description
     product.image = image
+    product.extraImages = req.body.images
     product.brand = brand
     product.category = category
     product.subCategory = subCategory

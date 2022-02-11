@@ -167,7 +167,7 @@ export const createProduct = () => async (dispatch, getState) => {
   }
 }
 
-export const updateProduct = (product) => async (dispatch, getState) => {
+export const updateProduct = (product, _id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_UPDATE_REQUEST,
@@ -184,11 +184,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.put(
-      `/api/products/${product._id}`,
-      product,
-      config
-    )
+    const { data } = await axios.put(`/api/products/${_id}`, product, config)
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,

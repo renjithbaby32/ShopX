@@ -25,6 +25,7 @@ const ProductScreen = () => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
+  const [mainImage, setMainImage] = useState('')
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -70,6 +71,10 @@ const ProductScreen = () => {
     )
   }
 
+  const selectImage = (url) => {
+    setMainImage(url)
+  }
+
   return (
     <Container>
       <Link className="btn btn-light my-3" to="/">
@@ -90,15 +95,44 @@ const ProductScreen = () => {
                   smallImage: {
                     alt: 'Product Image',
                     isFluidWidth: true,
-                    src: product.image,
+                    src: mainImage ? mainImage : product.image,
                   },
                   largeImage: {
-                    src: product.image,
+                    src: mainImage ? mainImage : product.image,
                     width: 1200,
                     height: 1200,
                   },
                 }}
               />
+              <Row>
+                <Col>
+                  <Image
+                    onClick={(e) => {
+                      e.preventDefault()
+                      selectImage(product.image)
+                    }}
+                    src={product.image}
+                    alt={product.name}
+                    fluid
+                  />
+                </Col>
+                {product.extraImages.length > 0 &&
+                  product.extraImages.map((image) => {
+                    return (
+                      <Col>
+                        <Image
+                          onClick={(e) => {
+                            e.preventDefault()
+                            selectImage(image.url)
+                          }}
+                          src={image.url}
+                          alt={image.name}
+                          fluid
+                        />
+                      </Col>
+                    )
+                  })}
+              </Row>
             </Col>
             <Col md={3}>
               <ListGroup variant="flush">
