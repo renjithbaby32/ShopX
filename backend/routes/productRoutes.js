@@ -11,11 +11,13 @@ import {
   createProductReview,
   getProductsOnDiscount,
   getAllProductsForReport,
+  dashboard,
 } from '../controllers/productController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 router.route('/').get(getProducts).post(protect, admin, createProduct)
 router.route('/report').get(getAllProductsForReport)
+router.route('/dashboard').get(dashboard)
 
 router.route('/top').get(getTopProducts)
 router.route('/productsOnDiscount').get(getProductsOnDiscount)

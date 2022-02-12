@@ -383,6 +383,51 @@ const updateUserPassword = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Get details for the dashboard
+// @route   GET /api/users/dashboard
+// @access  Private/Admin
+const dashboard = asyncHandler(async (req, res) => {
+  const users = await User.find()
+  const usersCount = users.length
+
+  const users1 = await User.find({
+    createdAt: {
+      $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 * 4,
+      $lt: Date.now() - 1000 * 60 * 60 * 24 * 30 * 3,
+    },
+  })
+
+  const users2 = await User.find({
+    createdAt: {
+      $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 * 3,
+      $lt: Date.now() - 1000 * 60 * 60 * 24 * 30 * 2,
+    },
+  })
+  const users3 = await User.find({
+    createdAt: {
+      $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 * 2,
+      $lt: Date.now() - 1000 * 60 * 60 * 24 * 30 * 1,
+    },
+  })
+  const users4 = await User.find({
+    createdAt: {
+      $gte: Date.now() - 1000 * 60 * 60 * 24 * 30 * 1,
+    },
+  })
+
+  const userNumbers = [
+    users1.length,
+    users2.length,
+    users3.length,
+    users4.length,
+  ]
+
+  res.json({
+    usersCount,
+    userNumbers,
+  })
+})
+
 export {
   authUser,
   registerUser,
@@ -402,4 +447,5 @@ export {
   deductWalletBalance,
   forgotPassword,
   updateUserPassword,
+  dashboard,
 }

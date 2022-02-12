@@ -216,6 +216,29 @@ const getProductsOnDiscount = asyncHandler(async (req, res) => {
   res.json(products)
 })
 
+// @desc    Get the total number of products and the number of products in each category
+// @route   GET /api/products/dashboard
+// @access  Private/Admin
+const dashboard = asyncHandler(async (req, res) => {
+  const products = await Product.find({})
+  const length = products.length
+  let smartphone = 0
+  let laptop = 0
+  let others = 0
+
+  products.forEach((product) => {
+    if (product.category === 'smartphone') {
+      smartphone++
+    } else if (product.category === 'laptop') {
+      laptop++
+    } else {
+      others++
+    }
+  })
+
+  res.json({ length, smartphone, laptop, others })
+})
+
 export {
   getProducts,
   getProductById,
@@ -227,4 +250,5 @@ export {
   getProductsByCategory,
   getProductsOnDiscount,
   getAllProductsForReport,
+  dashboard,
 }
