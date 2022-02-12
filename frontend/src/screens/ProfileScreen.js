@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Form, Button, Row, Col } from 'react-bootstrap'
+import { Table, Form, Button, Row, Col, Card } from 'react-bootstrap'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   getUserDetails,
+  listAddresses,
   showReferralCode,
   showWalletBalance,
   updateUserProfile,
@@ -28,6 +29,9 @@ const ProfileScreen = () => {
 
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = userDetails
+
+  const addressList = useSelector((state) => state.addressList)
+  const { addresses, addedAddress, deletedAddress } = addressList
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -54,6 +58,7 @@ const ProfileScreen = () => {
         dispatch(showReferralCode())
         dispatch(showWalletBalance())
         dispatch(listMyOrders())
+        dispatch(listAddresses())
       } else {
         setName(user.name)
         setEmail(user.email)
@@ -68,6 +73,11 @@ const ProfileScreen = () => {
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password }))
     }
+  }
+
+  const addressManageHandler = (e) => {
+    e.preventDefault()
+    navigate('/addressmanage')
   }
 
   return (
@@ -146,6 +156,29 @@ const ProfileScreen = () => {
               when your friend registers for a free account<br></br>
             </p>
           </Form>
+        )}
+        {addresses && (
+          <>
+            <h1>Addresses</h1>
+            {addresses.map((address) => {
+              return (
+                <Card className="my-1 p-3 rounded mb-3">
+                  <Card.Body>
+                    <Card.Text as="div">{address.address}</Card.Text>
+                    <Card.Text as="div">{address.city}</Card.Text>
+                    <Card.Text as="div">{address.postalCode}</Card.Text>
+                    <Card.Text as="div">{address.country}</Card.Text>
+                  </Card.Body>
+                </Card>
+              )
+            })}
+            <Button
+              onClick={addressManageHandler}
+              className="primary btn-block"
+            >
+              Manage Addresses
+            </Button>
+          </>
         )}
       </Col>
       <Col md={9}>

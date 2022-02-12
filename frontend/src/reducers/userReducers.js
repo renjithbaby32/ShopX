@@ -197,6 +197,18 @@ export const addressListReducer = (state = { addresses: [] }, action) => {
       return { ...state, addresses: action.payload }
     case ADD_ADDRESS:
       return { ...state, addedAddress: true }
+    case 'DELETE_ADDRESS':
+      return { ...state, deletedAddress: true }
+    case 'RESET_ADDRESS_STATUS':
+      return {
+        ...state,
+        deletedAddress: false,
+        addedAddress: false,
+        updatedAddress: false,
+      }
+    case 'ADDRESS_UPDATED':
+      return { ...state, updatedAddress: true }
+
     default:
       return state
   }

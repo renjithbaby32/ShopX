@@ -520,3 +520,20 @@ export const addToAddresses = (address) => async (dispatch, getState) => {
     type: ADD_ADDRESS,
   })
 }
+
+export const deleteAddress = (address) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState()
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  }
+
+  await axios.delete(`/api/address/ind/${address}`, config)
+  dispatch({
+    type: 'DELETE_ADDRESS',
+  })
+}

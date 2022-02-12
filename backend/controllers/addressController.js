@@ -31,4 +31,43 @@ const getAddresses = asyncHandler(async (req, res) => {
   res.json(address)
 })
 
-export { addAddress, getAddresses }
+// @desc    Find one address
+// @route   GET /api/address/:addressId
+// @access  Private
+const getAddress = asyncHandler(async (req, res) => {
+  const addressId = req.params.addressId
+
+  const address = await Address.findById(addressId)
+
+  res.json(address)
+})
+
+// @desc    Delete an address
+// @route   DELETE /api/address/:addressId
+// @access  Private
+const deleteAddress = asyncHandler(async (req, res) => {
+  const addressId = req.params.addressId
+
+  await Address.deleteOne({ _id: addressId })
+
+  res.json('success')
+})
+
+// @desc    Update an address
+// @route   PUT /api/address/:addressId
+// @access  Private
+const updateAddress = asyncHandler(async (req, res) => {
+  const addressId = req.params.addressId
+
+  const address = await Address.findById(addressId)
+
+  address.address = req.body.address
+  address.city = req.body.city
+  address.postalCode = req.body.postalCode
+  address.city = req.body.city
+
+  await address.save()
+  res.json('updated')
+})
+
+export { addAddress, getAddresses, deleteAddress, updateAddress, getAddress }

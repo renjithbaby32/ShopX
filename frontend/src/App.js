@@ -29,8 +29,10 @@ import OfferEditScreen from './screens/OfferEditScreen'
 import CreateOfferScreen from './screens/CreateOfferScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen'
+import AddressEditScreen from './screens/AddressEditScreen'
 // import ProfileScreen from './screens/ProfileScreen'
 import FallbackScreen from './screens/FallbackScreen'
+import AddressManageScreen from './screens/AddressManageScreen'
 const ProfileScreen = lazy(() => import('./screens/ProfileScreen'))
 const UserListScreen = lazy(() => import('./screens/UserListScreen'))
 const UserEditScreen = lazy(() => import('./screens/UserEditScreen'))
@@ -80,6 +82,11 @@ const App = () => {
                 <Route path="/placeorder" element={<PlaceOrderScreen />} />
                 <Route path="/order/:id" element={<OrderScreen />} />
                 <Route path="/profile" element={<ProfileScreen />} />
+                <Route
+                  path="/addressmanage"
+                  element={<AddressManageScreen />}
+                />
+
                 <Route
                   path="/admin/productlist"
                   element={<ProductListScreen />}
@@ -138,6 +145,10 @@ const App = () => {
                 <Route
                   path="/forgotPassword"
                   element={<ForgotPasswordScreen />}
+                />
+                <Route
+                  path="/address/:id/edit"
+                  element={<AddressEditScreen />}
                 />
                 <Route path="/" element={<HomeScreen />} exact />
                 <Route path="/*" element={<FallbackScreen />} />

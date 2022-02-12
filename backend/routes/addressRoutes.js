@@ -1,8 +1,19 @@
 import express from 'express'
-import { addAddress, getAddresses } from '../controllers/addressController.js'
+import {
+  addAddress,
+  getAddresses,
+  deleteAddress,
+  updateAddress,
+  getAddress,
+} from '../controllers/addressController.js'
 const router = express.Router()
 import { protect, admin } from '../middleware/authMiddleware.js'
 
-router.route('/:userId').post(addAddress).get(getAddresses)
+router.route('/:userId').post(protect, addAddress).get(protect, getAddresses)
 
+router
+  .route('/ind/:addressId')
+  .delete(protect, deleteAddress)
+  .put(protect, updateAddress)
+  .get(protect, getAddress)
 export default router
