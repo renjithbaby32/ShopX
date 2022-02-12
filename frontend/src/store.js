@@ -34,6 +34,7 @@ import {
   orderListReducer,
   orderDispatchReducer,
   orderOutForDeliveryReducer,
+  orderCancelReducer,
 } from './reducers/orderReducers'
 import { categoryListReducer } from './reducers/cateGoryReducer'
 import { offerListReducer } from './reducers/offerReducer'
@@ -62,6 +63,7 @@ const reducer = combineReducers({
   orderDeliver: orderDeliverReducer,
   orderDispatch: orderDispatchReducer,
   orderOutForDelivery: orderOutForDeliveryReducer,
+  orderCancel: orderCancelReducer,
   orderListMy: orderListMyReducer,
   orderList: orderListReducer,
   categoryList: categoryListReducer,

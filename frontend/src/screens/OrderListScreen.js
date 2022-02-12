@@ -42,6 +42,7 @@ const OrderListScreen = () => {
               <th>TOTAL</th>
               <th>PAID</th>
               <th>DELIVERED</th>
+              <th>CANCELLED</th>
               <th></th>
             </tr>
           </thead>
@@ -65,6 +66,11 @@ const OrderListScreen = () => {
                   ) : (
                     <i className="fas fa-times" style={{ color: 'red' }}></i>
                   )}
+                </td>
+                <td>
+                  {order.isCancelled ? (
+                    <p className="text-danger">Cancelled</p>
+                  ) : null}
                 </td>
                 <td>
                   <LinkContainer to={`/order/${order._id}`}>

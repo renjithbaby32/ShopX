@@ -11,6 +11,7 @@ import {
   deliverOrder,
   dispatchOrder,
   outForDeliveryOrder,
+  deleteOrder,
 } from '../actions/orderActions'
 import {
   ORDER_PAY_RESET,
@@ -18,6 +19,7 @@ import {
   ORDER_DISPATCH_RESET,
   ORDER_OUT_FOR_DELIVERY_RESET,
   ORDER_PAY_SUCCESS,
+  ORDER_CANCEL_RESET,
 } from '../constants/orderConstants'
 
 const OrderScreen = () => {
@@ -45,6 +47,9 @@ const OrderScreen = () => {
   const orderOutForDelivery = useSelector((state) => state.orderOutForDelivery)
   const { loading: loadingOutForDelivery, success: successOutForDelivery } =
     orderOutForDelivery
+
+  const orderCancel = useSelector((state) => state.orderCancel)
+  const { loading: cancelLoading, success: cancelSuccess } = orderCancel
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -125,12 +130,14 @@ const OrderScreen = () => {
       successDeliver ||
       successDispatch ||
       successOutForDelivery ||
+      cancelSuccess ||
       order._id !== orderId
     ) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch({ type: ORDER_DELIVER_RESET })
       dispatch({ type: ORDER_DISPATCH_RESET })
       dispatch({ type: ORDER_OUT_FOR_DELIVERY_RESET })
+      dispatch({ type: ORDER_CANCEL_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -145,6 +152,7 @@ const OrderScreen = () => {
     successDeliver,
     successDispatch,
     successOutForDelivery,
+    cancelSuccess,
     order,
   ])
 
@@ -162,6 +170,10 @@ const OrderScreen = () => {
 
   const outForDeliveryHandler = () => {
     dispatch(outForDeliveryOrder(order))
+  }
+
+  const cancelHandler = () => {
+    dispatch(deleteOrder(order))
   }
 
   return loading ? (
@@ -296,7 +308,7 @@ const OrderScreen = () => {
                   <Col>&#x20b9;{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+              {!order.isCancelled && !order.isPaid && (
                 <ListGroup.Item>
                   <Button className="btn btn-block" onClick={showRazorpay}>
                     Pay Now
@@ -306,9 +318,11 @@ const OrderScreen = () => {
               {loadingDeliver && <Loader />}
               {userInfo &&
               userInfo.isAdmin &&
+              !order.isCancelled &&
               order.isDelivered ? null : userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
+                !order.isCancelled &&
                 order.isOutForDelivery ? (
                 <ListGroup.Item>
                   <Button
@@ -319,7 +333,10 @@ const OrderScreen = () => {
                     Mark As Delivered
                   </Button>
                 </ListGroup.Item>
-              ) : userInfo && userInfo.isAdmin && order.isDispatched ? (
+              ) : userInfo &&
+                userInfo.isAdmin &&
+                !order.isCancelled &&
+                order.isDispatched ? (
                 <ListGroup.Item>
                   <Button
                     type="button"
@@ -329,7 +346,7 @@ const OrderScreen = () => {
                     Mark As Out For Delivery
                   </Button>
                 </ListGroup.Item>
-              ) : userInfo && userInfo.isAdmin ? (
+              ) : userInfo && userInfo.isAdmin && !order.isCancelled ? (
                 <ListGroup.Item>
                   <Button
                     type="button"
@@ -341,6 +358,30 @@ const OrderScreen = () => {
                 </ListGroup.Item>
               ) : null}
             </ListGroup>
+            {!order.isCancelled ? (
+              <ListGroup.Item>
+                <Button
+                  type="button"
+                  className="btn btn-danger btn-block"
+                  onClick={cancelHandler}
+                >
+                  Cancel the Order
+                </Button>
+              </ListGroup.Item>
+            ) : (
+              <ListGroup.Item>
+                <Button type="button" className="btn btn-warning btn-block">
+                  Order Cancelled
+                </Button>
+              </ListGroup.Item>
+            )}
+            {order.isPaid && order.isCancelled && (
+              <ListGroup.Item>
+                <Button type="button" className="btn btn-success btn-block">
+                  Refund Initiated
+                </Button>
+              </ListGroup.Item>
+            )}
           </Card>
         </Col>
       </Row>

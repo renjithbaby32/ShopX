@@ -25,6 +25,9 @@ import {
   ORDER_OUT_FOR_DELIVERY_REQUEST,
   ORDER_OUT_FOR_DELIVERY_SUCCESS,
   ORDER_OUT_FOR_DELIVERY_FAIL,
+  ORDER_CANCEL_REQUEST,
+  ORDER_CANCEL_SUCCESS,
+  ORDER_CANCEL_FAIL,
 } from '../constants/orderConstants'
 import { logout } from './userActions'
 
@@ -269,6 +272,47 @@ export const outForDeliveryOrder = (order) => async (dispatch, getState) => {
     }
     dispatch({
       type: ORDER_OUT_FOR_DELIVERY_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const deleteOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_CANCEL_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.put(
+      `/api/orders/${order._id}/cancel`,
+      {},
+      config
+    )
+
+    dispatch({
+      type: ORDER_CANCEL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: ORDER_CANCEL_FAIL,
       payload: message,
     })
   }

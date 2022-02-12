@@ -105,18 +105,22 @@ const ProductScreen = () => {
                 }}
               />
               <Row>
-                <Col>
-                  <Image
-                    onClick={(e) => {
-                      e.preventDefault()
-                      selectImage(product.image)
-                    }}
-                    src={product.image}
-                    alt={product.name}
-                    fluid
-                  />
-                </Col>
-                {product.extraImages.length > 0 &&
+                {product.extraImages && product.extraImages.length > 0 && (
+                  <Col>
+                    <Image
+                      onClick={(e) => {
+                        e.preventDefault()
+                        selectImage(product.image)
+                      }}
+                      src={product.image}
+                      alt={product.name}
+                      fluid
+                    />
+                  </Col>
+                )}
+
+                {product.extraImages &&
+                  product.extraImages.length > 0 &&
                   product.extraImages.map((image) => {
                     return (
                       <Col>
