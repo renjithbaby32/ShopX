@@ -111,10 +111,12 @@ const updateProduct = asyncHandler(async (req, res) => {
   } = req.body
 
   let images = []
-  if (typeof req.body.images === 'string') {
-    images.push(req.body.images)
-  } else {
-    images = req.body.images
+  if (req.body.images) {
+    if (typeof req.body.images === 'string') {
+      images.push(req.body.images)
+    } else {
+      images = req.body.images
+    }
   }
 
   let imagesLinks = []
