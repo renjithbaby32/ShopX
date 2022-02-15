@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useAlert } from 'react-alert'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
@@ -15,6 +16,8 @@ const CartScreen = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const qty = Number(searchParams.get('qty')) || 1
+
+  const alert = useAlert()
 
   const dispatch = useDispatch()
 
@@ -36,7 +39,12 @@ const CartScreen = () => {
   }, [dispatch, productId, qty])
 
   const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id))
+    if (
+      window.confirm('Are you sure you want to remove this item from cart?')
+    ) {
+      dispatch(removeFromCart(id))
+      alert.success('Item has been removed from cart')
+    }
   }
 
   const checkoutHandler = () => {

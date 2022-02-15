@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useAlert } from 'react-alert'
 import { useNavigate } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button } from 'react-bootstrap'
@@ -10,6 +11,8 @@ import { listUsers, deleteUser, updateUser } from '../actions/userActions'
 const UserListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const alert = useAlert()
 
   const userList = useSelector((state) => state.userList)
   const { loading, error, users } = userList
@@ -26,18 +29,21 @@ const UserListScreen = () => {
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure to delete this  user?')) {
       dispatch(deleteUser(id))
+      alert.success('User has been deleted')
     }
   }
 
   const blockHandler = (user) => {
     if (window.confirm('Do you want to block this user?')) {
       dispatch(updateUser({ ...user, isBlocked: true }))
+      alert.success('User has been blocked')
     }
   }
 
   const unblockHandler = (user) => {
     if (window.confirm('Unblock this user?')) {
       dispatch(updateUser({ ...user, isBlocked: false }))
+      alert.success('User has been unblocked')
     }
   }
 
@@ -47,7 +53,7 @@ const UserListScreen = () => {
     } else {
       navigate('/login')
     }
-  }, [dispatch, userInfo, successUpdate])
+  }, [dispatch, userInfo, successUpdate, successDelete])
 
   return (
     <>

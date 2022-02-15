@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useAlert } from 'react-alert'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
@@ -10,6 +11,8 @@ import Loader from '../components/Loader'
 const CartScreen = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const alert = useAlert()
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -26,7 +29,12 @@ const CartScreen = () => {
   }, [dispatch, successDelete])
 
   const removeFromWishListHandler = (productId) => {
-    dispatch(deleteFromWishlist(productId))
+    if (
+      window.confirm('Are you sure you want to remove this item from wishlist?')
+    ) {
+      dispatch(deleteFromWishlist(productId))
+      alert.success('Item has been removed from wishlist')
+    }
   }
 
   const checkoutHandler = () => {

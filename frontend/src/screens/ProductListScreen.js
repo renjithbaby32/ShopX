@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useAlert } from 'react-alert'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { Table, Button, Row, Col } from 'react-bootstrap'
@@ -19,6 +20,8 @@ const ProductListScreen = () => {
   const navigate = useNavigate()
   const params = useParams()
   const pageNumber = params.pageNumber || 1
+
+  const alert = useAlert()
 
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, pages, page } = productList
@@ -65,6 +68,7 @@ const ProductListScreen = () => {
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(deleteProduct(id))
+      alert.success('Product has been deleted')
     }
   }
 

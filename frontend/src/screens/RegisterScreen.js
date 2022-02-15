@@ -11,8 +11,12 @@ const RegisterScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [phoneValidationError, setPhoneValidationError] = useState(null)
   const [password, setPassword] = useState('')
+  const [passwordValidationError, setPasswordValidationError] = useState(null)
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [confirmPasswordValidationError, setConfirmPasswordValidationError] =
+    useState(null)
   const [message, setMessage] = useState(null)
   const [referralId, setReferralId] = useState()
 
@@ -80,8 +84,20 @@ const RegisterScreen = () => {
             type="password"
             placeholder="Enter password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              if (e.target.value.length < 6) {
+                setPasswordValidationError(
+                  'Password must be at least 6 characters'
+                )
+              } else {
+                setPasswordValidationError(null)
+              }
+            }}
           ></Form.Control>
+          {passwordValidationError && (
+            <p className="py-1 text-danger">{passwordValidationError}</p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="confirmPassword" className="py-1">
@@ -90,8 +106,18 @@ const RegisterScreen = () => {
             type="password"
             placeholder="Confirm password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value)
+              if (e.target.value !== password) {
+                setConfirmPasswordValidationError('Passwords do not match')
+              } else {
+                setConfirmPasswordValidationError(null)
+              }
+            }}
           ></Form.Control>
+          {confirmPasswordValidationError && (
+            <p className="py-1 text-danger">{confirmPasswordValidationError}</p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="referralId" className="py-1">

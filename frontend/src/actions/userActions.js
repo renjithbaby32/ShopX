@@ -123,12 +123,10 @@ export const register =
           Authorization: `Bearer ${token}`,
         },
       }
-
+      await axios.post('/api/users/referral', { referralId }, configB)
       if (referralId.length > 0) {
         await axios.put('/api/users/referral', { referralId }, configB)
       }
-
-      await axios.post('/api/users/referral', { referralId }, configB)
 
       localStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
