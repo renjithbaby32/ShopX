@@ -1,6 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import {
+  Button,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  Form,
+  FormGroup,
+} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -9,10 +18,20 @@ import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 import { USER_DETAILS_RESET } from '../constants/userConstants'
 import { deductFromWallet, showWalletBalance } from '../actions/userActions'
 import { deleteCart } from '../actions/cartActions'
+import axios from 'axios'
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const [couponName, setCouponName] = useState(null)
+  const [coupons, setCoupons] = useState([])
+  const [message, setMessage] = useState(null)
+  const [couponApplied, setCouponApplied] = useState(false)
+  const [couponAppliedMessage, setCouponAppliedMessage] = useState(null)
+  const [couponAmount, setCouponAmount] = useState(0)
+
+  const userId = useSelector((state) => state.userLogin.userInfo._id)
 
   const cart = useSelector((state) => state.cart)
 
@@ -51,11 +70,32 @@ const PlaceOrderScreen = () => {
   cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) -
-    Number(walletUsed)
+    Number(walletUsed) -
+    Number(couponAmount)
   ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
   const { order, success, error } = orderCreate
+
+  const applyCouponHandler = async (couponId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    const couponDataRaw = await axios.put(
+      '/api/coupon',
+      { couponId, user: userId },
+      config
+    )
+    if (couponDataRaw.data.error) {
+      setMessage(couponDataRaw.data.error)
+    } else {
+      setCouponApplied(true)
+      setCouponAppliedMessage(`${couponDataRaw.data.discount} discount applied`)
+      setCouponAmount(couponDataRaw.data.discount)
+    }
+  }
 
   useEffect(() => {
     if (success) {
@@ -65,6 +105,16 @@ const PlaceOrderScreen = () => {
     }
     dispatch(showWalletBalance())
   }, [navigate, success])
+
+  useEffect(() => {
+    //to get the list of all available coupons
+    setMessage(null)
+    const getAllCoupons = async () => {
+      const { data } = await axios.get(`/api/coupon`)
+      setCoupons(data)
+    }
+    getAllCoupons()
+  }, [order])
 
   const placeOrderHandler = () => {
     dispatch(deleteCart())
@@ -175,6 +225,15 @@ const PlaceOrderScreen = () => {
                   <Col>&#x20b9;{walletUsed}</Col>
                 </Row>
               </ListGroup.Item>
+              {couponAmount > 0 && (
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Coupon Offer</Col>
+                    <Col>&#x20b9;{couponAmount}</Col>
+                  </Row>
+                </ListGroup.Item>
+              )}
+
               <ListGroup.Item>
                 <Row>
                   <Col>Amount Payable</Col>
@@ -196,6 +255,52 @@ const PlaceOrderScreen = () => {
                 </Button>
               </ListGroup.Item>
             </ListGroup>
+          </Card>
+          <Card>
+            <Col>
+              <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <h2>Available Coupons</h2>
+                </ListGroup.Item>
+                {message && <Message variant="danger">{message}</Message>}
+                {couponApplied ? (
+                  <h1>
+                    {couponAppliedMessage && (
+                      <Message variant="success">
+                        &#x20b9;{couponAppliedMessage}
+                      </Message>
+                    )}
+                  </h1>
+                ) : (
+                  coupons.length > 0 &&
+                  coupons.map((coupon) => {
+                    return (
+                      <ListGroup.Item>
+                        <Row style={{ alignItems: 'baseline' }}>
+                          <Col>
+                            <strong>{coupon.name}</strong>
+                          </Col>
+                          <Col>
+                            <p>&#x20b9;{coupon.discount} Off</p>
+                          </Col>
+                          <Col>
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                applyCouponHandler(coupon._id)
+                              }}
+                            >
+                              Apply
+                            </Button>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    )
+                  })
+                )}
+                {}
+              </ListGroup>
+            </Col>
           </Card>
         </Col>
       </Row>

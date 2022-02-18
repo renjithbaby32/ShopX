@@ -32,6 +32,7 @@ import CreateOfferScreen from './screens/CreateOfferScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen'
 import AddressEditScreen from './screens/AddressEditScreen'
+import AddCouponScreen from './screens/AddCouponScreen'
 // import ProfileScreen from './screens/ProfileScreen'
 import FallbackScreen from './screens/FallbackScreen'
 import AddressManageScreen from './screens/AddressManageScreen'
@@ -147,6 +148,10 @@ const App = () => {
                   <Route
                     path="/admin/offers/create"
                     element={<CreateOfferScreen />}
+                  />
+                  <Route
+                    path="/admin/coupons/add"
+                    element={<AddCouponScreen />}
                   />
                   <Route
                     path="/search/:keyword"

@@ -15,6 +15,7 @@ import bodyparser from 'body-parser'
 import morgan from 'morgan'
 import shortid from 'shortid'
 import categoryRoutes from './routes/categoryRoutes.js'
+import couponRoutes from './routes/couponRoutes.js'
 import Razorpay from 'razorpay'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import Order from './models/orderModel.js'
@@ -90,6 +91,7 @@ app.use('/api/categories', categoryRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/offer', offerRoutes)
 app.use('/api/address', addressRoutes)
+app.use('/api/coupon', couponRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))

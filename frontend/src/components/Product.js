@@ -80,12 +80,14 @@ const Product = ({ product, wishlist = [] }) => {
               <Col>
                 <h5>
                   &#x20b9;
-                  {product.price - product.price * 0.01 * product.discountPrice}
+                  {Math.floor(
+                    product.price - product.price * 0.01 * product.discountPrice
+                  )}
                 </h5>
               </Col>
               <Col>
                 <Card.Text as="h5">
-                  <s>&#x20b9;{product.price}</s>
+                  <s>&#x20b9;{Math.floor(product.price)}</s>
                 </Card.Text>
               </Col>
             </Row>

@@ -151,10 +151,12 @@ const ProductScreen = () => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   Price: &#x20b9;
-                  {product.discountPrice > 0
-                    ? product.price -
-                      product.price * 0.01 * product.discountPrice
-                    : product.price}
+                  {Math.floor(
+                    product.discountPrice > 0
+                      ? product.price -
+                          product.price * 0.01 * product.discountPrice
+                      : product.price
+                  )}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   Description: {product.description}

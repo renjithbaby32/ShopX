@@ -143,7 +143,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.discountPrice = discountPrice
     product.description = description
     product.image = image
-    product.extraImages = req.body.images
+    product.extraImages =
+      req.body.images.length > 0 ? req.body.images : product.extraImages
     product.brand = brand
     product.category = category
     product.subCategory = subCategory

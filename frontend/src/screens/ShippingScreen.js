@@ -48,6 +48,7 @@ const ShippingScreen = () => {
         {addresses.map((address) => (
           <Col key={address._id} sm={12} md={6} lg={4} xl={3}>
             <Card
+              style={{ cursor: 'pointer' }}
               onClick={(e) => {
                 e.preventDefault()
                 addressSelector({
