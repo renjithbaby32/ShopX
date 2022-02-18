@@ -36,7 +36,7 @@ const PaymentScreen = () => {
             <Form.Check
               className="py-3"
               type="radio"
-              label="PayPal or Credit Card"
+              label="PayPal or Credit Card ( For International Payments ) "
               id="PayPal"
               name="paymentMethod"
               value="PayPal"

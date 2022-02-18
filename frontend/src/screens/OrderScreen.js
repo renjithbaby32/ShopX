@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { PayPalButton } from 'react-paypal-button-v2'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -167,6 +168,42 @@ const OrderScreen = () => {
     order,
   ])
 
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/login')
+    }
+
+    const addPayPalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal')
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+      document.body.appendChild(script)
+    }
+
+    // dispatch(getOrderDetails(orderId))
+    if (!order || successPay || successDeliver || order._id !== orderId) {
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch({ type: ORDER_DELIVER_RESET })
+      dispatch(getOrderDetails(orderId))
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      } else {
+        setSdkReady(true)
+      }
+    }
+  }, [dispatch, orderId, successPay, successDeliver, order, navigate])
+
+  const submitPaymentHandler = (paymentResult) => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderId, paymentResult))
+  }
+
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult))
   }
@@ -193,7 +230,7 @@ const OrderScreen = () => {
     <Message variant="danger">{error}</Message>
   ) : (
     <>
-      <h3>Order {order._id}</h3>
+      <h4>Order {order._id}</h4>
       <h2>
         Status
         {order.isDelivered ? (
@@ -319,15 +356,33 @@ const OrderScreen = () => {
                   <Col>&#x20b9;{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {order.paymentMethod !== 'COD' &&
+              {order.paymentMethod === 'Razorpay' &&
                 !order.isCancelled &&
                 !order.isPaid && (
                   <ListGroup.Item>
                     <Button className="btn btn-block" onClick={makePayment}>
-                      Pay Now
+                      Pay Now With Razorpay
                     </Button>
                   </ListGroup.Item>
                 )}
+              {!order.isPaid &&
+                !order.isCancelled &&
+                order.paymentMethod === 'PayPal' && (
+                  <>
+                    <ListGroup.Item>
+                      {loadingPay && <Loader />}
+                      {!sdkReady ? (
+                        <Loader />
+                      ) : (
+                        <PayPalButton
+                          amount={order.totalPrice / 75}
+                          onSuccess={submitPaymentHandler}
+                        />
+                      )}
+                    </ListGroup.Item>
+                  </>
+                )}
+
               {loadingDeliver && <Loader />}
               {userInfo &&
               userInfo.isAdmin &&
