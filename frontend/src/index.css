@@ -112,6 +112,21 @@ h2 {
   }
 }
 
+.crop-img-container-wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  background: #1a1a1a54;
+}
+
+.crop-img-container {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  padding: 1rem;
+}
+
 /* 
 @media (max-width: 900px) {
   .carousel-caption h2 {

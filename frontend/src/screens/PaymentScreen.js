@@ -40,17 +40,19 @@ const PaymentScreen = () => {
               id="PayPal"
               name="paymentMethod"
               value="PayPal"
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onClick={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
             <Form.Check
               className="py-3"
               type="radio"
               label="Razorpay - Pay with UPI, debit cards, or credit cards"
-              id="razorpay"
+              id="Razorpay"
               name="paymentMethod"
-              value="razorpay"
+              value="Razorpay"
               checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onClick={(e) => {
+                setPaymentMethod(e.target.value)
+              }}
             ></Form.Check>
             <Form.Check
               className="py-3"
@@ -59,7 +61,7 @@ const PaymentScreen = () => {
               id="cod"
               name="paymentMethod"
               value="COD"
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onClick={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
           </Col>
         </Form.Group>

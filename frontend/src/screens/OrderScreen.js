@@ -79,44 +79,55 @@ const OrderScreen = () => {
     })
   }
 
-  async function showRazorpay() {
-    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+  const makePayment = () => {
+    if (order.paymentMethod === 'Razorpay') {
+      async function showRazorpay() {
+        const res = await loadScript(
+          'https://checkout.razorpay.com/v1/checkout.js'
+        )
 
-    if (!res) {
-      alert('Razorpay SDK failed to load. Are you online?')
-      return
+        if (!res) {
+          alert('Razorpay SDK failed to load. Are you online?')
+          return
+        }
+
+        const { data } = await axios.post(`/razorpay/${orderId}`)
+
+        const options = {
+          key: 'rzp_test_w4t1UiRN2QYw07',
+          currency: data.currency,
+          amount: data.amount.toString(),
+          order_id: data.id,
+          name: 'ShopX',
+          description: 'Make the payment to complete the process',
+          image: '',
+          handler: async (response) => {
+            await axios.post(`/razorpay/success/${orderId}`)
+            dispatch({ type: ORDER_PAY_SUCCESS })
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature);
+
+            alert('Transaction successful')
+          },
+          prefill: {
+            name: 'Renjith Baby',
+            email: 'renjithbabyofficial@gmail.com',
+            phone_number: '9495064118',
+          },
+        }
+        const paymentObject = new window.Razorpay(options)
+        paymentObject.open()
+        // dispatch({
+        //   type: 'ORDER_DELIVER_SUCCESS',
+        // })
+      }
+
+      showRazorpay()
+    } else if (order.paymentMethod === 'PayPal') {
+      //function to integrate PayPal API
+      console.log('PayPal')
     }
-
-    const { data } = await axios.post(`/razorpay/${orderId}`)
-
-    const options = {
-      key: 'rzp_test_w4t1UiRN2QYw07',
-      currency: data.currency,
-      amount: data.amount.toString(),
-      order_id: data.id,
-      name: 'ShopX',
-      description: 'Make the payment to complete the process',
-      image: '',
-      handler: async (response) => {
-        await axios.post(`/razorpay/success/${orderId}`)
-        dispatch({ type: ORDER_PAY_SUCCESS })
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-
-        alert('Transaction successful')
-      },
-      prefill: {
-        name: 'Renjith Baby',
-        email: 'renjithbabyofficial@gmail.com',
-        phone_number: '9495064118',
-      },
-    }
-    const paymentObject = new window.Razorpay(options)
-    paymentObject.open()
-    // dispatch({
-    //   type: 'ORDER_DELIVER_SUCCESS',
-    // })
   }
 
   useEffect(() => {
@@ -308,13 +319,15 @@ const OrderScreen = () => {
                   <Col>&#x20b9;{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isCancelled && !order.isPaid && (
-                <ListGroup.Item>
-                  <Button className="btn btn-block" onClick={showRazorpay}>
-                    Pay Now
-                  </Button>
-                </ListGroup.Item>
-              )}
+              {order.paymentMethod !== 'COD' &&
+                !order.isCancelled &&
+                !order.isPaid && (
+                  <ListGroup.Item>
+                    <Button className="btn btn-block" onClick={makePayment}>
+                      Pay Now
+                    </Button>
+                  </ListGroup.Item>
+                )}
               {loadingDeliver && <Loader />}
               {userInfo &&
               userInfo.isAdmin &&
