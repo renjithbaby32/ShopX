@@ -22,7 +22,9 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email })
 
   if (user.isBlocked) {
-    res.redirect('/Blocked')
+    // res.redirect('Blocked')
+    res.status(401)
+    throw new Error('You are blocked!')
   }
 
   if (user && (await user.matchPassword(password))) {
