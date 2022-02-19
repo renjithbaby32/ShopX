@@ -172,11 +172,15 @@ const ProductScreen = () => {
                       <Col>
                         <strong>
                           &#x20b9;
-                          {product.discountPrice > 0
-                            ? (product.price -
-                                product.price * 0.01 * product.discountPrice) *
-                              qty
-                            : product.price * qty}
+                          {Math.floor(
+                            product.discountPrice > 0
+                              ? (product.price -
+                                  product.price *
+                                    0.01 *
+                                    product.discountPrice) *
+                                  qty
+                              : product.price * qty
+                          )}
                         </strong>
                       </Col>
                     </Row>

@@ -73,20 +73,24 @@ const CartScreen = () => {
                   <Col md={2}>
                     &#x20b9;
                     {item.product.discountPrice > 0
-                      ? item.product.price -
-                        item.product.discountPrice * 0.01 * item.product.price +
-                        `(${item.product.discountPrice}% off)`
+                      ? Math.floor(
+                          item.product.price -
+                            item.product.discountPrice *
+                              0.01 *
+                              item.product.price
+                        ) + `(${item.product.discountPrice}% off)`
                       : item.product.price}
                   </Col>
                   <Col md={2}>
                     <Form.Control
                       as="select"
                       value={item.qty}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        dispatch(removeFromCart(item.product._id))
                         dispatch(
-                          addToCart(item.product, Number(e.target.value))
+                          addToCart(item.product._id, Number(e.target.value))
                         )
-                      }
+                      }}
                     >
                       {[...Array(item.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
