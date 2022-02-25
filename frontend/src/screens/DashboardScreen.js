@@ -248,14 +248,18 @@ const DashboardScreen = () => {
           <Col lg={4} md={6} xs={12}>
             <div className="my-3 border-1 rounded-2 shadow p-3 bg-white d-flex flex-column align-items-center justify-content-center">
               <h5>Total Amount</h5>
-              <h5 className="letter-spacing-1">&#x20b9;{info && info.total}</h5>
+              <h5 className="letter-spacing-1">
+                &#x20b9;{info && Math.floor(info.total)}
+              </h5>
               <p className="m-0"></p>
             </div>
           </Col>
           <Col lg={4} md={6} xs={12}>
             <div className="my-3 border-1 rounded-2 shadow p-3 bg-white d-flex flex-column align-items-center justify-content-center">
               <h5>Paid Amount</h5>
-              <h5 className="letter-spacing-1">&#x20b9;{info && info.paid}</h5>
+              <h5 className="letter-spacing-1">
+                &#x20b9;{info && Math.floor(info.paid)}
+              </h5>
               <p className="m-0"></p>
             </div>
           </Col>
@@ -263,7 +267,7 @@ const DashboardScreen = () => {
             <div className="my-3 border-1 rounded-2 shadow p-3 bg-white d-flex flex-column align-items-center justify-content-center">
               <h5>Pending Amount</h5>
               <h5 className="letter-spacing-1">
-                &#x20b9;{info && info.unpaidAmount}
+                &#x20b9;{info && Math.floor(info.unpaidAmount)}
               </h5>
               <p className="m-0"></p>
             </div>

@@ -14,6 +14,8 @@ const offerSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+      min: 0,
+      max: 100,
     },
     category: {
       type: String,
