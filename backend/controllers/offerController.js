@@ -121,7 +121,25 @@ const getOfferById = asyncHandler(async (req, res) => {
 // @route   DELETE /api/offer/:offerId
 // @access  Private/ Admin
 const deleteOffer = asyncHandler(async (req, res) => {
-  await Offer.deleteOne({ _id: req.params.offerId })
+  const offer = await Offer.findById(req.params.offerId)
+  if (offer.category === 'all') {
+    const products = await Product.find({})
+    products.forEach(async (product) => {
+      product.discountPrice = 0
+      await product.save()
+    })
+  } else {
+    const products = await Product.find({ category: offer.category })
+    if (products) {
+      products.forEach(async (product) => {
+        product.discountPrice = 0
+        await product.save()
+      })
+    } else {
+    }
+  }
+
+  // await Offer.deleteOne({ _id: req.params.offerId })
 
   res.json('deleted successfully')
 })
